@@ -1,4 +1,4 @@
-# Computer Vision · Quiz: Labs 1 to 3
+# Computational Perception · Quiz: Labs 1 to 3
 
 An 82-question practice quiz on Labs 1–3 (Images, Pixels and Cameras · Colour and Shapes · Learning from Examples).
 Students sign in with their full name (الاسم ثلاثي) and group number, then answer by clicking only.
