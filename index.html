@@ -21,6 +21,7 @@
   --line: #d2dbe4;
   --accent: #0a78c2;        /* the lab box colour (255, 150, 0) in BGR, deepened for text */
   --accent-soft: #e1f0fb;
+  --on-accent: #ffffff;
   --mark: #f0b400;          /* the pixel readout colour (0, 215, 255) in BGR */
   --ok: #1d8049;
   --ok-soft: #e3f4ea;
@@ -40,7 +41,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0f151b; --surface: #17202a; --ink: #e5ecf2; --muted: #91a3b4; --line: #2b3845;
-    --accent: #4db0ff; --accent-soft: #15324a; --mark: #ffd23f;
+    --accent: #4db0ff; --accent-soft: #15324a; --on-accent: #0b1520; --mark: #ffd23f;
     --ok: #46c27a; --ok-soft: #16301f; --bad: #ff6f63; --bad-soft: #3a1c1a; --open: #2a3643;
     --lab1: #7aa7ff; --lab2: #62c771; --lab3: #ff7488;
     --code-bg: #0b1016; --code-ink: #dfe8f0;
@@ -49,7 +50,7 @@
 }
 :root[data-theme="dark"] {
   --bg: #0f151b; --surface: #17202a; --ink: #e5ecf2; --muted: #91a3b4; --line: #2b3845;
-  --accent: #4db0ff; --accent-soft: #15324a; --mark: #ffd23f;
+  --accent: #4db0ff; --accent-soft: #15324a; --on-accent: #0b1520; --mark: #ffd23f;
   --ok: #46c27a; --ok-soft: #16301f; --bad: #ff6f63; --bad-soft: #3a1c1a; --open: #2a3643;
   --lab1: #7aa7ff; --lab2: #62c771; --lab3: #ff7488;
   --code-bg: #0b1016; --code-ink: #dfe8f0;
@@ -86,28 +87,89 @@ h1 { font: 700 clamp(2rem, 6vw, 3rem)/1.05 var(--font-display); margin: 0; text-
 .labs-line span { display: inline-flex; gap: 6px; align-items: center; }
 .byline { font-size: .9rem; color: var(--muted); margin: 0; }
 
-/* Sign-in screen: the form and the how-to side by side */
-body.signed-out .needs-login { display: none; }
+/* Sign-in screen: a dark "sensor" panel beside a calm form, joined in one frame.
+   The sensor panel keeps one dark look in both themes; the form side follows the theme tokens. */
+body.signed-out .needs-login, body.signed-out .head { display: none; }
 body:not(.signed-out) .gate { display: none; }
-.gate { display: grid; gap: 18px; align-items: start; }
-@media (min-width: 860px) { .gate { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
-.login, .howto { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px 22px; display: grid; gap: 14px; min-width: 0; }
-.login { border-top: 4px solid var(--accent); }
-.login h2, .howto h2 { font: 600 1.25rem/1.2 var(--font-display); margin: 0; }
-.login .lead { margin: 0; color: var(--muted); }
-.login form { display: grid; gap: 6px; }
-.login label { font-weight: 600; margin-top: 10px; }
-.login input[type=text] { font-size: 1.05rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; width: 100%; min-width: 0; }
-.login input[type=text]:hover, .login input[type=text]:focus { border-color: var(--accent); }
-.login select { max-width: 14em; font-size: 1rem; padding: 10px; }
-.login .field-note { font-size: .85rem; color: var(--muted); margin: 0; }
-.login .login-err { margin: 6px 0 0; color: var(--bad); font-weight: 600; }
-.login .btn { justify-self: start; margin-top: 14px; }
-.howto p { margin: 0; }
-.howto ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
-.howto .ar { padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); line-height: 1.8; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: 500 .75rem/1 var(--font-mono); padding: 5px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.gate { display: grid; margin-block: 28px 8px; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--surface);
+  box-shadow: 0 40px 80px -40px rgba(8, 24, 40, .45), 0 2px 8px rgba(8, 24, 40, .06); }
+@media (min-width: 900px) { .gate { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); margin-top: 44px; } }
+
+.hero { position: relative; isolation: isolate; color: #e6edf3; background: radial-gradient(130% 90% at 0% 0%, #16304a 0%, #0c1824 52%, #0a131c 100%);
+  padding: 34px clamp(22px, 4vw, 40px) 30px; display: grid; gap: 26px; align-content: start; min-width: 0; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(160deg, #000 10%, transparent 75%); mask-image: linear-gradient(160deg, #000 10%, transparent 75%); }
+.hero-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 .72rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: #8fb3d1; }
+.hero-rec { display: inline-flex; align-items: center; gap: 7px; color: #c9d6e2; }
+.hero-rec i { width: 7px; height: 7px; border-radius: 50%; background: #ff5d6c; box-shadow: 0 0 0 3px rgba(255, 93, 108, .18); }
+.hero-title { margin: 0; font: 700 clamp(2.5rem, 5.4vw, 3.7rem)/.98 var(--font-display); letter-spacing: -.02em; text-wrap: balance; }
+.hero-title span { display: block; color: #7cc4ff; }
+.sensor { margin: 0; display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
+.sensor canvas { max-width: 100%; height: auto; }
+.sensor figcaption { display: grid; gap: 8px; font: .78rem/1.5 var(--font-mono); color: #8fa6bb; min-width: 0; }
+.sensor figcaption b { color: #e6edf3; font-weight: 600; }
+.sensor code { background: rgba(255, 210, 63, .1); color: #ffd23f; padding: 4px 6px; border-radius: 4px; white-space: pre; font-size: .76rem; justify-self: start; }
+.hero-labs { list-style: none; margin: 0; padding: 0; display: grid; }
+.hero-labs li { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-top: 1px solid rgba(255, 255, 255, .09); }
+.hero-labs li:last-child { border-bottom: 1px solid rgba(255, 255, 255, .09); }
+.hero-labs b { font: 600 .7rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: #8fa6bb; margin-right: 8px; }
+.hero-labs .ch1 { background: #3d78e6; } .hero-labs .ch2 { background: #34a048; } .hero-labs .ch3 { background: #d9435a; }
+.hero-specs { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.hero-specs div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; }
+.hero-specs dt { font: 500 .64rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: #8fa6bb; }
+.hero-specs dd { margin: 0; font: 700 1.7rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.hero-by { margin: 0; font-size: .82rem; color: #8fa6bb; }
+
+.signin { position: relative; padding: clamp(30px, 4.5vw, 52px) clamp(22px, 4.5vw, 52px); display: grid; align-content: center; min-width: 0; }
+.signin-in { position: relative; display: grid; gap: 22px; max-width: 420px; width: 100%; margin: 0 auto; }
+.signin-in::before, .signin-in::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--accent); pointer-events: none; opacity: .75; }
+.signin-in::before { top: -14px; left: -16px; border-right: 0; border-bottom: 0; }
+.signin-in::after { bottom: -14px; right: -16px; border-left: 0; border-top: 0; }
+.signin-head { display: grid; gap: 8px; }
+.signin-head h2 { margin: 0; font: 700 2rem/1.05 var(--font-display); letter-spacing: -.01em; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.signin-head h2 span { font: 600 1.05rem/1.2 "IBM Plex Sans Arabic", var(--font-body); color: var(--muted); letter-spacing: 0; }
+.signin-head p { margin: 0; color: var(--muted); font-size: .95rem; }
+#login-form { display: grid; gap: 22px; }
+.field { display: grid; gap: 10px; }
+.field-label { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 600; font-size: .92rem; }
+.field-label span[lang] { font-weight: 500; color: var(--muted); }
+#st-name { height: 54px; font-size: 1.08rem; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 0 16px; width: 100%; min-width: 0; transition: border-color .15s, box-shadow .15s, background .15s; }
+#st-name::placeholder { color: var(--muted); opacity: .7; }
+#st-name:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+#st-name:focus { outline: none; border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 4px var(--accent-soft); }
+.name-meter { display: flex; align-items: center; gap: 5px; font-size: .8rem; color: var(--muted); min-height: 1.2em; }
+.name-meter i { width: 26px; height: 4px; border-radius: 99px; background: var(--line); transition: background .2s; flex: none; }
+.name-meter i.on { background: var(--accent); }
+.name-meter.ready i { background: var(--ok); }
+.name-meter span { margin-left: 6px; }
+.name-meter.ready span { color: var(--ok); font-weight: 600; }
+.groups { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.grp { height: 44px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); font: 600 .95rem/1 var(--font-mono); color: var(--ink); cursor: pointer; transition: border-color .15s, background .15s, transform .1s; }
+.grp:hover { border-color: var(--accent); }
+.grp:active { transform: scale(.96); }
+.grp[aria-checked="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: 0 8px 18px -10px var(--accent); }
+.login-err { margin: 0; padding: 10px 12px; border-left: 3px solid var(--bad); background: var(--bad-soft); border-radius: 0 8px 8px 0; color: var(--bad); font-weight: 600; font-size: .9rem; }
+.btn-start { display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; width: 100%; border: 0; border-radius: 12px; background: var(--ink); color: var(--surface); font: 600 1.05rem/1 var(--font-body); cursor: pointer; transition: background .2s, color .2s, transform .1s; box-shadow: 0 14px 28px -16px rgba(8, 24, 40, .6); }
+.btn-start:hover { background: var(--accent); color: var(--on-accent); }
+.btn-start:active { transform: translateY(1px); }
+.btn-start svg { transition: transform .2s; }
+.btn-start:hover svg { transform: translateX(3px); }
+.signin-note { display: flex; gap: 8px; align-items: center; justify-content: center; margin: -8px 0 0; font-size: .8rem; color: var(--muted); }
+.how { border-top: 1px solid var(--line); padding-top: 16px; }
+.how summary { cursor: pointer; font-weight: 600; font-size: .92rem; display: flex; justify-content: space-between; gap: 10px; }
+.how summary span { font-weight: 500; color: var(--muted); }
+.how ol { margin: 12px 0 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: .9rem; color: var(--muted); }
+.how .ar { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); line-height: 1.8; font-size: .9rem; }
+@media (max-width: 600px) {
+  .sensor { display: none; }
+  .hero { gap: 20px; padding-top: 26px; }
+  .hero-specs, .hero-by { display: none; }
+  .hero-title { font-size: 2.3rem; }
+  .hero-labs li { padding: 9px 0; }
+  .gate { margin-top: 16px; border-radius: 16px; }
+}
 
 /* Slim score bar: one line, progress along its lower edge */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
@@ -326,32 +388,59 @@ pre.code select.blank.wrong { background: #5a2420; border-color: #ff6f63; color:
     <p class="byline">Prepared by Ahmed M. AbdAl-Montalib</p>
   </header>
 
-  <div class="gate">
-    <section class="login" id="login" aria-labelledby="login-h">
-      <h2 id="login-h">Sign in to start · <span lang="ar" dir="rtl">تسجيل الدخول</span></h2>
-      <p class="lead">Write your full name and choose your group. They appear on your result, so check them before you start.</p>
-      <form id="login-form" novalidate>
-        <label for="st-name">Full name · <span lang="ar" dir="rtl">الاسم ثلاثي</span></label>
-        <input id="st-name" type="text" dir="auto" autocomplete="off" spellcheck="false" maxlength="80" placeholder="مثال: أحمد محمد علي">
-        <p class="field-note">Three names at least: your name, your father's name and your grandfather's name.</p>
-        <label for="st-group">Group number · <span lang="ar" dir="rtl">رقم المجموعة</span></label>
-        <select id="st-group"><option value="">Choose…</option></select>
-        <p class="login-err" id="login-err" aria-live="polite" hidden></p>
-        <button class="btn" type="submit">Start the quiz</button>
-      </form>
+  <div class="gate" id="gate">
+    <section class="hero" aria-labelledby="hero-t">
+      <div class="hero-top"><span>Computational Perception · Laboratory</span><span class="hero-rec"><i></i>Weeks 1–3</span></div>
+      <h1 class="hero-title" id="hero-t">Labs 1–3<span>Practice Quiz</span></h1>
+      <figure class="sensor">
+        <canvas id="sensor" role="img" aria-label="A handwritten zero from the digits dataset, drawn as 8 by 8 pixels"></canvas>
+        <figcaption>
+          <span><b>digits.images[0]</b><br>8 × 8 pixels · ink from 0 to 16</span>
+          <code id="sensor-row"></code>
+          <span>Every image is a grid of numbers.</span>
+        </figcaption>
+      </figure>
+      <ul class="hero-labs">
+        <li><i class="ch ch1">B</i><span><b>Lab 1</b>Images, Pixels and Cameras</span></li>
+        <li><i class="ch ch2">G</i><span><b>Lab 2</b>Colour and Shapes</span></li>
+        <li><i class="ch ch3">R</i><span><b>Lab 3</b>Learning from Examples</span></li>
+      </ul>
+      <dl class="hero-specs" id="hero-specs"></dl>
+      <p class="hero-by">Prepared by Ahmed M. AbdAl-Montalib</p>
     </section>
 
-    <section class="howto" aria-labelledby="how">
-      <h2 id="how">How this quiz works</h2>
-      <ol>
-        <li>One question at a time, and nothing to type: click, tap, drag a slider or choose from a list.</li>
-        <li>Press <b>Check</b>. Your answer is locked, the explanation appears, and it tells you where to read again in the lab sheet.</li>
-        <li>Move with <b>Next</b> and <b>Previous</b>, or jump with the question map: each square is one question, green when right and red when wrong.</li>
-        <li>At the end, press <b>Finish</b> for your score card. Then <b>Redo my mistakes</b> gives you only the questions you got wrong, in a new order.</li>
-      </ol>
-      <p class="ar" lang="ar" dir="rtl">لا تحتاج إلى الكتابة في هذا الاختبار: اختر إجابتك ثم اضغط <b>Check</b> لترى الإجابة الصحيحة والشرح. في النهاية اضغط <b>Finish</b> لترى درجتك، ثم اضغط <b>Redo my mistakes</b> لتعيد حل الأسئلة التي أخطأت فيها فقط.</p>
-      <p id="count-line"></p>
-      <div class="chips" id="type-chips"></div>
+    <section class="signin" id="login" aria-labelledby="login-h">
+      <div class="signin-in">
+        <div class="signin-head">
+          <h2 id="login-h">Sign in <span lang="ar" dir="rtl">تسجيل الدخول</span></h2>
+          <p>Your name and group appear on your score card.</p>
+        </div>
+        <form id="login-form" novalidate>
+          <div class="field">
+            <div class="field-label"><label for="st-name">Full name</label><span lang="ar" dir="rtl">الاسم ثلاثي</span></div>
+            <input id="st-name" type="text" dir="auto" autocomplete="off" spellcheck="false" maxlength="80" placeholder="مثال: أحمد محمد علي" aria-describedby="name-meter">
+            <div class="name-meter" id="name-meter" aria-live="polite"><i></i><i></i><i></i><span></span></div>
+          </div>
+          <div class="field">
+            <div class="field-label"><span id="grp-l">Group number</span><span lang="ar" dir="rtl">رقم المجموعة</span></div>
+            <div class="groups" id="group-chips" role="radiogroup" aria-labelledby="grp-l"></div>
+            <input type="hidden" id="st-group" value="">
+          </div>
+          <p class="login-err" id="login-err" aria-live="polite" hidden></p>
+          <button class="btn-start" type="submit"><span>Start the quiz</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4.5-4.5L15 10l-4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="signin-note"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5"/></svg>Nothing is sent anywhere: it stays in this browser.</p>
+        </form>
+        <details class="how">
+          <summary>How the quiz works <span lang="ar" dir="rtl">طريقة الاختبار</span></summary>
+          <ol>
+            <li>One question at a time, and nothing to type: click, tap, drag a slider or choose from a list.</li>
+            <li>Press <b>Check</b>: the answer is locked and the explanation tells you where to read again in the lab sheet.</li>
+            <li>Move with <b>Next</b> and <b>Previous</b>, or tap a square of the question map.</li>
+            <li>Press <b>Finish</b> for your score card, then <b>Redo my mistakes</b> for only the questions you got wrong.</li>
+          </ol>
+          <p class="ar" lang="ar" dir="rtl">لا تحتاج إلى الكتابة في هذا الاختبار: اختر إجابتك ثم اضغط <b>Check</b> لترى الإجابة الصحيحة والشرح. في النهاية اضغط <b>Finish</b> لترى درجتك، ثم اضغط <b>Redo my mistakes</b> لتعيد حل الأسئلة التي أخطأت فيها فقط.</p>
+        </details>
+      </div>
     </section>
   </div>
 </div>
@@ -1368,32 +1457,80 @@ function nextRound(ids) {
 }
 function restart() {
   store.clear(); S = fresh(); warnOpen = restartOpen = false;
-  $("#login-form").reset(); $("#login-err").hidden = true;
+  resetLogin();
   build(); showGate(); window.scrollTo(0, 0);
 }
 
 /* ---------- sign-in ---------- */
+const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+let sensorRow = 3, sensorTimer = null;
+function drawSensor() {
+  /* the first digit of the dataset, bright where the ink is, with the row being read framed in yellow */
+  const c = $("#sensor"), cell = 22, gap = 3, pad = 4, W = 8 * cell + 7 * gap + 2 * pad;
+  const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+  if (c.width !== W * dpr) { c.width = W * dpr; c.height = W * dpr; c.style.width = W + "px"; }
+  const x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, W);
+  DIGIT0.forEach((row, y) => row.forEach((v, i) => {
+    const t = v / 16, mix = (a, b) => Math.round(a + t * (b - a));
+    x.fillStyle = `rgb(${mix(22, 124)},${mix(42, 196)},${mix(62, 255)})`;
+    x.fillRect(pad + i * (cell + gap), pad + y * (cell + gap), cell, cell);
+  }));
+  x.strokeStyle = "#ffd23f"; x.lineWidth = 2;
+  x.strokeRect(pad - 2, pad + sensorRow * (cell + gap) - 2, 8 * cell + 7 * gap + 4, cell + 4);
+  $("#sensor-row").textContent = `row ${sensorRow}: [${DIGIT0[sensorRow].map(v => String(v).padStart(2)).join(" ")}]`;
+}
+function sensorRun(on) {
+  clearInterval(sensorTimer); sensorTimer = null;
+  if (on && !calm.matches) sensorTimer = setInterval(() => { sensorRow = (sensorRow + 1) % 8; drawSensor(); }, 1100);
+}
 function showGate() {
   document.body.classList.toggle("signed-out", !S.student);
+  sensorRun(!S.student);
   const who = $("#st-who"); who.innerHTML = "";
   if (S.student) { const n = el("bdi"); n.textContent = S.student.name; who.append(n, el("span", null, ` · Group ${esc(S.student.group)}`)); }
 }
-const groupSel = $("#st-group");
-for (let g = 1; g <= GROUPS; g++) groupSel.append(new Option(String(g), String(g)));
+const groupIn = $("#st-group"), chipsBox = $("#group-chips");
+function pickGroup(g) {
+  groupIn.value = g ? String(g) : "";
+  chipsBox.querySelectorAll(".grp").forEach(b => {
+    const on = b.dataset.g === groupIn.value;
+    b.setAttribute("aria-checked", on ? "true" : "false");
+    b.tabIndex = on || (!groupIn.value && b.dataset.g === "1") ? 0 : -1;
+  });
+}
+for (let g = 1; g <= GROUPS; g++) {
+  const b = el("button", "grp", String(g)); b.type = "button"; b.dataset.g = g;
+  b.setAttribute("role", "radio"); b.setAttribute("aria-label", `Group ${g}`);
+  b.addEventListener("click", () => { pickGroup(g); $("#login-err").hidden = true; });
+  b.addEventListener("keydown", e => {
+    const k = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 5, ArrowUp: -5 }[e.key]; if (!k) return;
+    e.preventDefault(); const n = Math.min(GROUPS, Math.max(1, g + k)); pickGroup(n); chipsBox.querySelector(`[data-g="${n}"]`).focus();
+  });
+  chipsBox.append(b);
+}
+const nameIn = $("#st-name");
+const nameWords = () => nameIn.value.replace(/\s+/g, " ").trim().split(" ").filter(w => /\p{L}/u.test(w));
+function meter() {
+  const n = Math.min(3, nameWords().length), m = $("#name-meter");
+  m.querySelectorAll("i").forEach((i, k) => i.classList.toggle("on", k < n));
+  m.classList.toggle("ready", n >= 3);
+  m.querySelector("span").textContent = n >= 3 ? "Three names: ready" : `${n} of 3 names`;
+}
+nameIn.addEventListener("input", () => { meter(); $("#login-err").hidden = true; });
+function resetLogin() { $("#login-form").reset(); pickGroup(null); meter(); $("#login-err").hidden = true; }
 $("#login-form").addEventListener("submit", e => {
   e.preventDefault();
-  const name = $("#st-name").value.replace(/\s+/g, " ").trim();
-  const words = name.split(" ").filter(w => /\p{L}/u.test(w));
-  const err = $("#login-err");
+  const words = nameWords(), err = $("#login-err");
   let msg = "";
   if (words.length < 3) msg = "Write your name in three parts at least. · اكتب اسمك ثلاثيًا";
-  else if (!groupSel.value) msg = "Choose your group number. · اختر رقم المجموعة";
-  if (msg) { err.innerHTML = esc(msg); err.hidden = false; (words.length < 3 ? $("#st-name") : groupSel).focus(); return; }
+  else if (!groupIn.value) msg = "Choose your group number. · اختر رقم المجموعة";
+  if (msg) { err.textContent = msg; err.hidden = false; (words.length < 3 ? nameIn : chipsBox.querySelector('[tabindex="0"]')).focus(); return; }
   err.hidden = true;
   S = fresh();                       /* a new student always starts with no answers */
-  S.student = { name, group: groupSel.value, at: new Date().toISOString() }; save();
+  S.student = { name: words.join(" "), group: groupIn.value, at: new Date().toISOString() }; save();
   build(); showGate(); window.scrollTo(0, 0);
 });
+pickGroup(null); meter(); drawSensor();
 
 /* ---------- page ---------- */
 function build() {
@@ -1412,9 +1549,8 @@ $("#map").open = wide.matches;
 wide.addEventListener("change", e => { $("#map").open = e.matches; });
 const typeCount = {};
 Q.forEach(q => typeCount[q.type] = (typeCount[q.type] || 0) + 1);
-$("#count-line").innerHTML = `${Q.length} questions: Lab 1 (${Q.filter(q => q.lab === 1).length}), Lab 2 (${Q.filter(q => q.lab === 2).length}) and Lab 3 (${Q.filter(q => q.lab === 3).length}). Allow about an hour for a full round.`;
-const chips = $("#type-chips");
-Object.keys(TYPE_NAMES).forEach(k => { if (typeCount[k]) chips.append(el("span", "chip", `${TYPE_NAMES[k]} · ${typeCount[k]}`)); });
+$("#hero-specs").innerHTML = [[Q.length, "Questions"], [Object.keys(typeCount).length, "Question types"], ["60", "Minutes a round"], ["0", "Typing"]]
+  .map(([v, l]) => `<div><dt>${l}</dt><dd>${v}</dd></div>`).join("");
 build();
 showGate();
 })();
