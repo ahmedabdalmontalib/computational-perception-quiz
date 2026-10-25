@@ -1,0 +1,1424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>CV Labs 1–3 Quiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout: a sign-in screen with the how-to beside it; then a pixel map of the questions (left, sticky on
+   wide screens) and one question at a time (right). Each lab wears one channel of a pixel: B, G, R. */
+:root {
+  --bg: #edf1f5;
+  --surface: #ffffff;
+  --ink: #15212c;
+  --muted: #566778;
+  --line: #d2dbe4;
+  --accent: #0a78c2;        /* the lab box colour (255, 150, 0) in BGR, deepened for text */
+  --accent-soft: #e1f0fb;
+  --mark: #f0b400;          /* the pixel readout colour (0, 215, 255) in BGR */
+  --ok: #1d8049;
+  --ok-soft: #e3f4ea;
+  --bad: #be3328;
+  --bad-soft: #fbe7e5;
+  --open: #dce4ec;
+  --lab1: #2b5fc7;          /* channel B */
+  --lab2: #2d8a3c;          /* channel G */
+  --lab3: #c4374b;          /* channel R */
+  --code-bg: #1e2833;
+  --code-ink: #e3ebf2;
+  --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, "Cascadia Mono", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f151b; --surface: #17202a; --ink: #e5ecf2; --muted: #91a3b4; --line: #2b3845;
+    --accent: #4db0ff; --accent-soft: #15324a; --mark: #ffd23f;
+    --ok: #46c27a; --ok-soft: #16301f; --bad: #ff6f63; --bad-soft: #3a1c1a; --open: #2a3643;
+    --lab1: #7aa7ff; --lab2: #62c771; --lab3: #ff7488;
+    --code-bg: #0b1016; --code-ink: #dfe8f0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f151b; --surface: #17202a; --ink: #e5ecf2; --muted: #91a3b4; --line: #2b3845;
+  --accent: #4db0ff; --accent-soft: #15324a; --mark: #ffd23f;
+  --ok: #46c27a; --ok-soft: #16301f; --bad: #ff6f63; --bad-soft: #3a1c1a; --open: #2a3643;
+  --lab1: #7aa7ff; --lab2: #62c771; --lab3: #ff7488;
+  --code-bg: #0b1016; --code-ink: #dfe8f0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 80px; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 1040px; margin: 0 auto; }
+code, pre, .mono { font-family: var(--font-mono); }
+code { font-size: .88em; background: var(--accent-soft); color: var(--ink); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+[lang="ar"], #st-name { font-family: "IBM Plex Sans Arabic", var(--font-body); }
+
+/* Channel tags B, G, R */
+.ch { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 5px; color: #fff; font: 700 .74rem/1 var(--font-mono); flex: none; }
+.ch1 { background: var(--lab1); } .ch2 { background: var(--lab2); } .ch3 { background: var(--lab3); }
+:root:not([data-theme="light"]) .ch { color: #fff; }
+
+/* Header */
+.head { padding-block: 32px 18px; display: grid; gap: 8px; }
+.eyebrow { font: 600 .78rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 700 clamp(2rem, 6vw, 3rem)/1.05 var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.labs-line { color: var(--muted); margin: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+.labs-line span { display: inline-flex; gap: 6px; align-items: center; }
+.byline { font-size: .9rem; color: var(--muted); margin: 0; }
+
+/* Sign-in screen: the form and the how-to side by side */
+body.signed-out .needs-login { display: none; }
+body:not(.signed-out) .gate { display: none; }
+.gate { display: grid; gap: 18px; align-items: start; }
+@media (min-width: 860px) { .gate { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.login, .howto { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 24px 22px; display: grid; gap: 14px; min-width: 0; }
+.login { border-top: 4px solid var(--accent); }
+.login h2, .howto h2 { font: 600 1.25rem/1.2 var(--font-display); margin: 0; }
+.login .lead { margin: 0; color: var(--muted); }
+.login form { display: grid; gap: 6px; }
+.login label { font-weight: 600; margin-top: 10px; }
+.login input[type=text] { font-size: 1.05rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; width: 100%; min-width: 0; }
+.login input[type=text]:hover, .login input[type=text]:focus { border-color: var(--accent); }
+.login select { max-width: 14em; font-size: 1rem; padding: 10px; }
+.login .field-note { font-size: .85rem; color: var(--muted); margin: 0; }
+.login .login-err { margin: 6px 0 0; color: var(--bad); font-weight: 600; }
+.login .btn { justify-self: start; margin-top: 14px; }
+.howto p { margin: 0; }
+.howto ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.howto .ar { padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); line-height: 1.8; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 .75rem/1 var(--font-mono); padding: 5px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+
+/* Slim score bar: one line, progress along its lower edge */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 9px max(16px, env(safe-area-inset-right, 0px)) 11px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.who { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .9rem; font-weight: 600; }
+.who span { color: var(--muted); font-weight: 400; }
+.stat { font: 600 .85rem/1 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat span { color: var(--muted); font-weight: 400; }
+.bar-btn { border: 1px solid var(--accent); color: var(--accent); background: none; border-radius: 7px; padding: 6px 10px; font: 600 .82rem/1 var(--font-body); cursor: pointer; white-space: nowrap; }
+.bar-btn:hover { background: var(--accent-soft); }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; display: flex; background: var(--line); }
+.progress i { display: block; height: 100%; transition: width .3s; }
+.progress .p-ok { background: var(--ok); }
+.progress .p-bad { background: var(--bad); }
+@media (max-width: 560px) { .stat.done { display: none; } }
+
+/* Map and stage */
+.round-note { margin: 18px 0 0; padding: 12px 14px; border-radius: 8px; background: var(--accent-soft); font-weight: 500; }
+.layout { display: grid; gap: 16px; margin-top: 18px; align-items: start; }
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 252px minmax(0, 1fr); gap: 22px; }
+  .map { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 62px); }
+}
+.map { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.map summary { cursor: pointer; display: flex; justify-content: space-between; gap: 10px; font: 600 1rem/1.3 var(--font-display); }
+.map summary span { font: 600 .8rem/1.6 var(--font-mono); color: var(--muted); }
+.map-lab { display: grid; gap: 6px; margin-top: 14px; }
+.map-lab h4 { margin: 0; display: flex; gap: 8px; align-items: center; font: 600 .78rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.map-lab .ch { width: 18px; height: 18px; font-size: .66rem; border-radius: 4px; }
+.cells { display: grid; grid-template-columns: repeat(auto-fill, 22px); gap: 4px; }
+.cell { width: 22px; height: 22px; border-radius: 4px; border: 0; padding: 0; background: var(--open); color: #fff; font: 700 .7rem/22px var(--font-mono); cursor: pointer; text-align: center; }
+.cell:hover { outline: 2px solid var(--accent); outline-offset: 1px; }
+.cell.ok { background: var(--ok); }
+.cell.no { background: var(--bad); }
+.cell.cur { outline: 2px solid var(--ink); outline-offset: 2px; }
+.map-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 14px; font-size: .78rem; color: var(--muted); }
+.map-legend span { display: inline-flex; gap: 5px; align-items: center; }
+.map-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.map-res { width: 100%; margin-top: 14px; }
+
+.stage { display: grid; gap: 14px; min-width: 0; }
+.stage-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 28px; }
+.stage-head .lab-name { font: 600 1.05rem/1.25 var(--font-display); }
+.stage-head .pos { margin-left: auto; font: 600 .85rem/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav { display: flex; justify-content: space-between; gap: 10px; }
+.nav .btn { min-width: 8.5em; }
+
+/* Question cards: a band in the lab's channel colour on top */
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--open); border-radius: var(--r); padding: 20px 20px 18px; display: grid; gap: 14px; min-width: 0; transition: box-shadow .5s; }
+.card[data-lab="1"] { border-top-color: var(--lab1); }
+.card[data-lab="2"] { border-top-color: var(--lab2); }
+.card[data-lab="3"] { border-top-color: var(--lab3); }
+.card.flash-ok { box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 30%, transparent); }
+.card.flash-no { box-shadow: 0 0 0 4px color-mix(in srgb, var(--bad) 30%, transparent); }
+.q-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.q-num { font: 600 .82rem/1 var(--font-mono); background: var(--code-bg); color: var(--mark); padding: 6px 8px; border-radius: 5px; font-variant-numeric: tabular-nums; }
+.q-type { font: 500 .78rem/1 var(--font-mono); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+.q-text { margin: 0; font-size: 1.06rem; font-weight: 500; max-width: 68ch; }
+pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); padding: 14px 16px; border-radius: 8px; font-size: .85rem; line-height: 1.6; overflow-x: auto; }
+.tk-k { color: #ff9ac1; } .tk-s { color: #b9e68f; } .tk-n { color: #ffc870; } .tk-c { color: #8195a8; font-style: italic; } .tk-f { color: #8ec8ff; }
+
+/* Choices */
+.opts { display: grid; gap: 8px; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover { border-color: var(--accent); }
+.opt input { margin: 3px 0 0; accent-color: var(--accent); width: 17px; height: 17px; flex: none; }
+.opt span { min-width: 0; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.opts .opt.right { border-color: var(--ok); background: var(--ok-soft); }
+.opts .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.locked .opt { cursor: default; }
+.opts.tf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tile { display: grid; justify-items: center; gap: 8px; padding: 12px 10px 10px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
+.tile:hover { border-color: var(--accent); }
+.tile[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.tile.right { border-color: var(--ok); background: var(--ok-soft); }
+.tile.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.tile b { font: 600 .85rem/1 var(--font-mono); }
+.swatch { width: 100%; max-width: 120px; height: 64px; border-radius: 6px; border: 1px solid var(--line); }
+.tile.digit { font: 700 2rem/1 var(--font-display); padding-block: 16px; }
+.tiles.digits { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tile canvas { max-width: 100%; height: auto; image-rendering: pixelated; outline: 1px solid var(--line); }
+.source { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.source canvas { max-width: 100%; height: auto; image-rendering: pixelated; border-radius: 4px; outline: 1px solid var(--line); }
+.source .cap { font-size: .88rem; color: var(--muted); max-width: 40ch; }
+.numgrid { font: .72rem/1.35 var(--font-mono); color: var(--muted); white-space: pre; overflow-x: auto; margin: 0; }
+
+/* Pixel grid */
+.pgrid-wrap { overflow-x: auto; }
+.pgrid { display: grid; gap: 3px; width: max-content; font: .75rem/1 var(--font-mono); color: var(--muted); }
+.pgrid .ax { display: grid; place-items: center; width: 34px; height: 22px; }
+.pgrid .ay { display: grid; place-items: center; width: 30px; height: 34px; }
+.pcell { width: 34px; height: 34px; border-radius: 3px; border: 1px solid var(--line); background: color-mix(in srgb, var(--accent-soft) 60%, var(--surface)); cursor: pointer; padding: 0; }
+.pcell:hover { border-color: var(--accent); }
+.pcell[aria-pressed="true"] { background: var(--mark); border-color: var(--mark); }
+.pcell.right { background: var(--ok); border-color: var(--ok); }
+.pcell.wrong { background: var(--bad); border-color: var(--bad); }
+.axis-note { font-size: .85rem; color: var(--muted); margin: 6px 0 0; }
+
+/* Click the line */
+.lines { background: var(--code-bg); border-radius: 8px; padding: 8px 0; overflow-x: auto; }
+.lines button { display: grid; grid-template-columns: 2.4em max-content; gap: 10px; width: 100%; text-align: left; background: none; border: 0; border-left: 3px solid transparent; color: var(--code-ink); font: .85rem/1.65 var(--font-mono); padding: 2px 14px 2px 8px; cursor: pointer; white-space: pre; }
+.lines button > span:first-child { color: #7f93a6; text-align: right; }
+.lines button:hover { background: rgba(255,255,255,.06); }
+.lines button[aria-pressed="true"] { background: rgba(77,176,255,.18); border-left-color: #4db0ff; }
+.lines button.right { background: rgba(70,194,122,.22); border-left-color: #46c27a; }
+.lines button.wrong { background: rgba(255,111,99,.22); border-left-color: #ff6f63; }
+
+/* Ordering */
+.order { display: grid; gap: 12px; }
+.order h4 { font: 600 .75rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
+.olist { display: grid; gap: 6px; min-height: 46px; padding: 6px; border: 1px dashed var(--line); border-radius: 8px; }
+.olist:empty::after { content: attr(data-empty); color: var(--muted); font-size: .9rem; padding: 6px; }
+.oitem { display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 9px 12px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); cursor: pointer; min-width: 0; }
+.oitem:hover { border-color: var(--accent); }
+.oitem .n { font: 600 .8rem/1.5 var(--font-mono); color: var(--accent); min-width: 1.4em; }
+.oitem.right { border-color: var(--ok); background: var(--ok-soft); }
+.oitem.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.small-btn { justify-self: start; background: none; border: 0; color: var(--accent); font: 600 .85rem/1 var(--font-body); padding: 4px 0; cursor: pointer; }
+
+/* Matching and blanks */
+.match { display: grid; gap: 8px; }
+.mrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+.mrow.right { border-color: var(--ok); background: var(--ok-soft); }
+.mrow.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.mrow .fix { grid-column: 1 / -1; font-size: .88rem; color: var(--ok); }
+select { font: inherit; font-size: .92rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; width: 100%; min-width: 0; }
+select:hover { border-color: var(--accent); }
+pre.code select.blank { width: auto; display: inline-block; font: 600 .82rem/1.2 var(--font-mono); padding: 2px 4px; background: #2a3a4a; color: #ffe08a; border: 1px solid #4b6177; border-radius: 4px; }
+pre.code select.blank.right { background: #1d4a31; border-color: #46c27a; color: #d7ffe6; }
+pre.code select.blank.wrong { background: #5a2420; border-color: #ff6f63; color: #ffe1de; }
+.blank-fix { font-size: .88rem; color: var(--muted); margin: 0; }
+
+/* Slider */
+.slider { display: grid; gap: 8px; }
+.slider-row { display: flex; align-items: center; gap: 14px; }
+.slider input[type=range] { flex: 1; accent-color: var(--accent); min-width: 0; height: 28px; }
+.readout { font: 600 1.05rem/1 var(--font-mono); background: var(--code-bg); color: var(--mark); padding: 8px 10px; border-radius: 6px; min-width: 6.5em; text-align: center; font-variant-numeric: tabular-nums; }
+.strip { position: relative; height: 22px; border-radius: 4px; border: 1px solid var(--line); margin-top: 18px; }
+.strip i { position: absolute; top: -16px; transform: translateX(-50%); font: 600 .7rem/1 var(--font-mono); font-style: normal; white-space: nowrap; }
+.strip i::after { content: ""; position: absolute; left: 50%; top: 14px; width: 2px; height: 26px; background: currentColor; transform: translateX(-50%); }
+.strip .k-ok { color: var(--ok); }
+.strip .k-you { color: var(--bad); top: auto; bottom: -18px; }
+.strip .k-you::after { top: auto; bottom: 12px; }
+
+/* Actions and feedback */
+.actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn { border: 0; border-radius: 8px; padding: 10px 18px; font-weight: 600; cursor: pointer; background: var(--accent); color: #fff; }
+.btn:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+.btn.ghost { background: none; color: var(--accent); border: 1px solid var(--accent); }
+.btn.ghost:disabled { border-color: var(--line); color: var(--muted); }
+:root:not([data-theme="light"]) .btn:not(.ghost):not(:disabled) { color: #fff; }
+.hint { font-size: .85rem; color: var(--muted); }
+.fb { border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; }
+.fb.ok { background: var(--ok-soft); }
+.fb.no { background: var(--bad-soft); }
+.fb strong { font-family: var(--font-display); font-size: 1rem; }
+.fb.ok strong { color: var(--ok); }
+.fb.no strong { color: var(--bad); }
+.fb p { margin: 0; max-width: 68ch; }
+.fb .see { font-size: .88rem; color: var(--muted); }
+.fb .see b { font-weight: 600; color: var(--ink); }
+
+/* Results */
+.finish { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px 20px; display: grid; gap: 14px; min-width: 0; }
+.finish.done { background: none; border: 0; padding: 0; }
+.finish h2 { font: 700 1.5rem/1.1 var(--font-display); margin: 0; }
+.finish h3 { font: 600 1rem/1.2 var(--font-display); margin: 0; }
+.finish p { margin: 0; }
+.warn { background: var(--bad-soft); border-radius: 8px; padding: 12px 14px; display: grid; gap: 10px; }
+.scorecard { border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 12px; padding: 18px; display: grid; gap: 16px; max-width: 460px; width: 100%; background: var(--surface); }
+.sc-top { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+.sc-label { font: 600 .7rem/1.3 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sc-name { font-size: 1.2rem; font-weight: 600; margin-top: 4px; overflow-wrap: anywhere; }
+.sc-meta { font: .8rem/1.5 var(--font-mono); color: var(--muted); }
+.sc-score { text-align: right; font: 700 2.6rem/1 var(--font-display); font-variant-numeric: tabular-nums; flex: none; }
+.sc-score small { font-size: .45em; color: var(--muted); }
+.sc-score .pct { font: 600 .9rem/1.4 var(--font-mono); color: var(--muted); }
+.pix { display: grid; grid-template-columns: repeat(auto-fill, 13px); gap: 3px; }
+.pix i { width: 13px; height: 13px; border-radius: 2px; background: var(--open); }
+.pix i.ok { background: var(--ok); } .pix i.no { background: var(--bad); }
+.labbars { display: grid; gap: 10px; }
+.lb { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .9rem; }
+.lb .track { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.lb .track i { display: block; height: 100%; }
+.lb .v { font: 600 .85rem/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.mastery { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; }
+.foot { margin-top: 40px; font-size: .85rem; color: var(--muted); }
+
+/* Motion: kept short, and off for anyone who asks for less */
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 50% { transform: scale(1.3); } }
+.card.enter, .finish.enter { animation: rise .22s ease-out; }
+.fb.fresh { animation: rise .25s ease-out; }
+.cell.pop { animation: pop .35s ease-out; }
+
+@media (max-width: 560px) {
+  .card { padding: 16px 14px; }
+  .mrow { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nav .btn { min-width: 0; flex: 1; }
+  .sc-score { font-size: 2.1rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow">Computer Vision · Laboratory · Weeks 1–3</div>
+    <h1>Quiz: Labs 1 to 3</h1>
+    <p class="labs-line"><span><i class="ch ch1">B</i> Images, Pixels and Cameras</span><span><i class="ch ch2">G</i> Colour and Shapes</span><span><i class="ch ch3">R</i> Learning from Examples</span></p>
+    <p class="byline">Prepared by Ahmed M. AbdAl-Montalib</p>
+  </header>
+
+  <div class="gate">
+    <section class="login" id="login" aria-labelledby="login-h">
+      <h2 id="login-h">Sign in to start · <span lang="ar" dir="rtl">تسجيل الدخول</span></h2>
+      <p class="lead">Write your full name and choose your group. They appear on your result, so check them before you start.</p>
+      <form id="login-form" novalidate>
+        <label for="st-name">Full name · <span lang="ar" dir="rtl">الاسم ثلاثي</span></label>
+        <input id="st-name" type="text" dir="auto" autocomplete="off" spellcheck="false" maxlength="80" placeholder="مثال: أحمد محمد علي">
+        <p class="field-note">Three names at least: your name, your father's name and your grandfather's name.</p>
+        <label for="st-group">Group number · <span lang="ar" dir="rtl">رقم المجموعة</span></label>
+        <select id="st-group"><option value="">Choose…</option></select>
+        <p class="login-err" id="login-err" aria-live="polite" hidden></p>
+        <button class="btn" type="submit">Start the quiz</button>
+      </form>
+    </section>
+
+    <section class="howto" aria-labelledby="how">
+      <h2 id="how">How this quiz works</h2>
+      <ol>
+        <li>One question at a time, and nothing to type: click, tap, drag a slider or choose from a list.</li>
+        <li>Press <b>Check</b>. Your answer is locked, the explanation appears, and it tells you where to read again in the lab sheet.</li>
+        <li>Move with <b>Next</b> and <b>Previous</b>, or jump with the question map: each square is one question, green when right and red when wrong.</li>
+        <li>At the end, press <b>Finish</b> for your score card. Then <b>Redo my mistakes</b> gives you only the questions you got wrong, in a new order.</li>
+      </ol>
+      <p class="ar" lang="ar" dir="rtl">لا تحتاج إلى الكتابة في هذا الاختبار: اختر إجابتك ثم اضغط <b>Check</b> لترى الإجابة الصحيحة والشرح. في النهاية اضغط <b>Finish</b> لترى درجتك، ثم اضغط <b>Redo my mistakes</b> لتعيد حل الأسئلة التي أخطأت فيها فقط.</p>
+      <p id="count-line"></p>
+      <div class="chips" id="type-chips"></div>
+    </section>
+  </div>
+</div>
+
+<nav class="bar needs-login" aria-label="Quiz progress">
+  <div class="bar-in">
+    <div class="who" id="st-who"></div>
+    <div class="stat done" id="st-done">0<span> / 0 checked</span></div>
+    <div class="stat" id="st-score">0<span> points</span></div>
+    <button class="bar-btn" id="to-results" type="button">Results</button>
+  </div>
+  <div class="progress" id="st-bar" aria-hidden="true"></div>
+</nav>
+
+<div class="wrap needs-login">
+  <p class="round-note" id="round-note" hidden></p>
+  <div class="layout">
+    <details class="map" id="map">
+      <summary>Question map <span id="map-count"></span></summary>
+      <div id="map-body"></div>
+    </details>
+    <div class="stage" id="stage" aria-live="polite">
+      <div class="stage-head" id="stage-head"></div>
+      <div id="stage-body"></div>
+      <div class="nav">
+        <button class="btn ghost" id="prev" type="button">← Previous</button>
+        <button class="btn" id="next" type="button">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Computer Vision · Labs 1–3 quiz · Prepared by Ahmed M. AbdAl-Montalib. Your name and answers are kept in this browser until you sign out.</p>
+</div>
+
+<script>
+(function () {
+"use strict";
+
+const KEY = "cv-labs-1-3-quiz-v1";
+const GROUPS = 20;                   /* the group list offers 1 to GROUPS */
+
+const LABS = [
+  { id: 1, title: "Images, Pixels and Cameras", file: "lab01_selfie_studio.py",
+    blurb: "The camera and the live loop, a frame as an array of numbers, colour channels and filters, drawing, keys and snapshots." },
+  { id: 2, title: "Colour and Shapes", file: "lab02_air_painter.py",
+    blurb: "The hue in HSV, a mask of one colour, contours and moments, and the canvas of the air painter." },
+  { id: 3, title: "Learning from Examples", file: "lab03_digit_reader.py",
+    blurb: "The digits dataset, the nearest-neighbour rule, and the steps from a camera picture to 64 numbers." }
+];
+
+const TYPE_NAMES = {
+  mc: "Choose one", tf: "True or false", multi: "Choose all that apply", order: "Put in order",
+  match: "Match the pairs", blanks: "Fill the gaps", grid: "Click the pixel", line: "Click the line",
+  slider: "Drag the slider", swatch: "Pick the colour", pic: "Pick the picture", digit: "Read the digit"
+};
+
+/* «...» marks inline code in the texts below; see = where to read again in the lab sheet. */
+const Q = [
+/* ---------------- Lab 1 ---------------- */
+{ lab: 1, type: "mc", see: "Part 1 · Example 1.1 (webcam.py)",
+  q: `In «cap = cv2.VideoCapture(0)», what does the «0» select?`,
+  opts: [`The default camera of the computer`, `The first frame of the video`, `A delay of 0 milliseconds between frames`, `Black-and-white mode`], a: 0,
+  why: `0 is the index of the camera: the default one. «cv2.VideoCapture(1)», «(2)», ... open other cameras.` },
+{ lab: 1, type: "order", see: "Part 1 · Example 1.1 (webcam.py)",
+  q: `Put the lines of «webcam.py» (Example 1.1) in the order in which they run.`,
+  items: [`«cap = cv2.VideoCapture(0)»`, `«if not cap.isOpened(): raise SystemExit(...)»`, `«ret, frame = cap.read()»`, `«frame = cv2.flip(frame, 1)»`, `«cv2.imshow("Webcam", frame)»`, `«if cv2.waitKey(1) & 0xFF == ord("q"): break»`, `«cap.release()»`],
+  why: `Open the camera and check it once; then, inside the loop, read a frame, change it, show it and check the keyboard; after the loop, free the camera.` },
+{ lab: 1, type: "pic", scene: "flip", target: "h", see: "Part 1 · Example 1.1 (webcam.py)",
+  q: `The first picture is a frame from the camera. Which picture is «cv2.flip(frame, 1)»?`,
+  why: `Flip code 1 mirrors the frame around its vertical axis, like a selfie camera: the left and right columns change places, the top and bottom rows stay. Code 0 would turn it upside down, and −1 would do both.` },
+{ lab: 1, type: "tf", see: "Part 1 · Figure 2 (the live loop)",
+  q: `OpenCV draws its windows only while «cv2.waitKey» runs. A program that calls «cv2.imshow» but never «cv2.waitKey» shows no picture, or a window that does not respond.`, a: true,
+  why: `«cv2.waitKey» does two jobs: it waits for a key and it lets OpenCV draw the windows. That is why every «cv2.imshow» is followed by a «cv2.waitKey».` },
+{ lab: 1, type: "mc", see: "Part 1 · Exercise 1.1",
+  q: `In Example 1.1 you change «cv2.waitKey(1)» to «cv2.waitKey(500)». What happens?`,
+  opts: [`The picture changes only about twice per second, but q still stops the program as soon as it is pressed`, `The video plays 500 times faster`, `The program stops by itself after 500 frames`, `The program waits 500 seconds before the first frame`], a: 0,
+  why: `Each pass of the loop now waits up to 500 ms, so at most 2 frames per second are shown. «cv2.waitKey» returns as soon as a key is pressed, so q still works at once.` },
+{ lab: 1, type: "mc", see: "Part 2 · Example 2.1 (one_frame.py)",
+  q: `A camera frame is 640 pixels wide and 480 pixels high. What does «frame.shape» return?`,
+  opts: [`«(480, 640, 3)»`, `«(640, 480, 3)»`, `«(3, 480, 640)»`, `«(480, 640)»`], a: 0,
+  why: `The shape is (height, width, channels): 480 rows, 640 columns and 3 colour channels. Rows always come first.` },
+{ lab: 1, type: "mc", see: "Part 2 · Example 2.1 (one_frame.py)",
+  q: `How many numbers does a colour frame of 640 × 480 pixels hold?`,
+  opts: [`921,600`, `307,200`, `1,120`, `640`], a: 0,
+  why: `480 × 640 × 3 = 921,600. The number 307,200 counts the pixels only, but each pixel holds 3 numbers: B, G and R.` },
+{ lab: 1, type: "grid", see: "Part 2 · Figure 3 (image coordinates)",
+  q: `This grid is a tiny image, 8 pixels wide and 6 pixels high. Click the pixel «frame[2, 5]».`, cols: 8, rows: 6, a: [5, 2],
+  why: `«frame[y, x]» takes the row first: «frame[2, 5]» is row 2 (y = 2) and column 5 (x = 5). Counting starts at 0, at the top-left corner.` },
+{ lab: 1, type: "grid", see: "Part 3 · Example 3.1 (drawing.py)",
+  q: `This grid is a tiny image, 8 pixels wide and 6 pixels high. Click the centre of the dot drawn by «cv2.circle(frame, (2, 5), 1, (0, 215, 255), -1)».`, cols: 8, rows: 6, a: [2, 5],
+  why: `Drawing functions take points as (x, y), the column first: (2, 5) is column 2, row 5. This is the opposite order of «frame[y, x]».` },
+{ lab: 1, type: "blanks", see: "Part 2 · Example 2.1 (one_frame.py)",
+  q: `Complete the line so that it reads the red value of the pixel in row 100 and column 50.`,
+  code: `red = frame[{0}, {1}, {2}]`,
+  blanks: [ { opts: ["100", "50"], a: 0 }, { opts: ["50", "100"], a: 0 }, { opts: ["2", "0", "1"], a: 0 } ],
+  why: `The row comes first (100), then the column (50). OpenCV stores the channels in the order B, G, R, so red is channel 2.` },
+{ lab: 1, type: "swatch", see: "Part 3 · Example 3.1 (drawing.py)",
+  q: `The selfie studio draws its pixel readout in the colour «(0, 215, 255)». Which colour is that?`,
+  opts: ["rgb(255,215,0)", "rgb(0,215,255)", "rgb(215,255,0)", "rgb(255,0,215)"], a: 0,
+  why: `OpenCV colours are (B, G, R): blue 0, green 215 and red 255. Full red with a lot of green and no blue is a golden yellow.` },
+{ lab: 1, type: "mc", see: "Part 2 · Example 2.2 (filters.py)",
+  q: `The negative of a frame is «255 - frame». What is the negative of the pixel «(0, 100, 255)»?`,
+  opts: [`«(255, 155, 0)»`, `«(0, 155, 255)»`, `«(255, 100, 0)»`, `«(0, -100, -255)»`], a: 0,
+  why: `Each value v becomes 255 − v: 255 − 0 = 255, 255 − 100 = 155, 255 − 255 = 0. The orange pixel (B 0, G 100, R 255) becomes a light blue.` },
+{ lab: 1, type: "pic", scene: "filters", target: "nb", see: "Part 2 · Example 2.2 (filters.py)",
+  q: `The first picture is a camera frame with six coloured patches. Which picture is «no_blue» after «no_blue[:, :, 0] = 0»?`,
+  why: `Channel 0 is blue. With blue set to 0 only green and red remain: the blue patch turns almost black, white turns yellow, and the whole picture turns yellow-green.` },
+{ lab: 1, type: "pic", scene: "filters", target: "red", see: "Part 2 · Example 2.2 (filters.py)",
+  q: `The first picture is a camera frame with six coloured patches. Which picture is the red channel alone, «frame[:, :, 2]», shown as an image?`,
+  why: `A single channel is shown as a grayscale image: bright where the frame has much red. The red, yellow, white and skin patches are light; the green and blue patches are dark.` },
+{ lab: 1, type: "mc", see: "Part 2 · Example 2.2 (filters.py)",
+  q: `What is the shape of «gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)» for a 640 × 480 frame?`,
+  opts: [`«(480, 640)»`, `«(480, 640, 3)»`, `«(480, 640, 1)»`, `«(640, 480)»`], a: 0,
+  why: `A grayscale image has one value per pixel, so it has no channel axis: just (height, width).` },
+{ lab: 1, type: "swatch", see: "Part 2 · the grayscale formula before Example 2.2",
+  q: `OpenCV makes grayscale with Y = 0.299 R + 0.587 G + 0.114 B. Which of these pure colours gives the brightest gray?`,
+  opts: ["rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)"], a: 1,
+  why: `Green has the largest weight, because the eye is most sensitive to it: pure green gives 150, pure red 76 and pure blue only 29.` },
+{ lab: 1, type: "slider", see: "Part 2 · the grayscale formula before Example 2.2",
+  q: `Set the slider to the gray value Y that «cv2.cvtColor» gives a pure red pixel «(0, 0, 255)».`, min: 0, max: 255, start: 128, a: 76, tol: 3, strip: "gray", label: "Y",
+  why: `Y = 0.299 × 255 + 0.587 × 0 + 0.114 × 0 ≈ 76. OpenCV gives exactly 76: pure red looks quite dark in grayscale.` },
+{ lab: 1, type: "multi", see: "Project · Hint",
+  q: `In the selfie studio every filter must give a 3-channel image. Which of these give a 3-channel image?`,
+  opts: [`«255 - frame»`, `«cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)»`, `«cv2.merge([red, red, red])»`, `«frame[:, :, 2]»`, `«cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)»`], a: [0, 1, 2],
+  why: `The negative keeps the shape of the frame. GRAY2BGR and «cv2.merge» copy one channel three times. «frame[:, :, 2]» and BGR2GRAY give one channel only.` },
+{ lab: 1, type: "blanks", see: "Project · Selfie studio (lab01_selfie_studio.py)",
+  q: `Complete the filters of «lab01_selfie_studio.py».`,
+  code: `if choice == "2":\n    frame = cv2.cvtColor(cv2.cvtColor(frame, cv2.{0}), cv2.{1})\nelif choice == "3":\n    frame = {2} - frame\nelif choice == "4":\n    frame[:, :, {3}] = 0          # no blue\nelif choice == "5":\n    red = frame[:, :, {4}]\n    frame = cv2.{5}([red, red, red])`,
+  blanks: [ { opts: ["COLOR_BGR2GRAY", "COLOR_GRAY2BGR", "COLOR_BGR2HSV"], a: 0 },
+            { opts: ["COLOR_GRAY2BGR", "COLOR_BGR2GRAY", "COLOR_HSV2BGR"], a: 0 },
+            { opts: ["255", "0", "1", "256"], a: 0 },
+            { opts: ["0", "1", "2"], a: 0 },
+            { opts: ["2", "0", "1"], a: 0 },
+            { opts: ["merge", "flip", "imshow"], a: 0 } ],
+  why: `Grayscale first (BGR2GRAY), then back to 3 channels (GRAY2BGR). The negative is 255 − value. Blue is channel 0 and red is channel 2. «cv2.merge» stacks three channels into one image.` },
+{ lab: 1, type: "line", see: "Part 3 · Example 3.1 (drawing.py)",
+  q: `This code should write the B, G and R values of the pixel in the middle. Click the line with the mistake.`,
+  lines: [`h, w = frame.shape[:2]`, `b, g, r = frame[w // 2, h // 2]`, `cv2.circle(frame, (w // 2, h // 2), 6, (0, 215, 255), 2)`, `cv2.putText(frame, f"B {b} G {g} R {r}", (w // 2 + 12, h // 2 + 6),`, `            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 215, 255), 2)`], a: 1,
+  why: `Indexing takes the row first: the middle pixel is «frame[h // 2, w // 2]». The circle and the text are right, because drawing takes (x, y).` },
+{ lab: 1, type: "mc", see: "Part 3 · Example 3.1 (drawing.py)",
+  q: `The selfie studio reads the middle pixel before it draws the circle around it. Why in this order?`,
+  opts: [`The circle is drawn into the frame itself: read afterwards, the pixel could have the circle's colour instead of the picture's`, `«cv2.circle» deletes the frame`, `Reading a pixel after drawing raises an error`, `The order makes no difference`], a: 0,
+  why: `Drawing functions change the pixels of the frame. To measure the picture, read first, draw afterwards.` },
+{ lab: 1, type: "mc", see: "Part 3 · Example 3.2 (keys.py)",
+  q: `«key = chr(cv2.waitKey(1) & 0xFF)». What does «& 0xFF» do?`,
+  opts: [`It keeps the last 8 bits of the key code, so that the comparison works on every system`, `It turns the key into an upper-case letter`, `It makes «cv2.waitKey» wait 255 ms`, `It turns the character into a number`], a: 0,
+  why: `On some systems «cv2.waitKey» returns extra bits above the key code. «& 0xFF» keeps only the last byte. Then «chr» turns the code into its character.` },
+{ lab: 1, type: "match", see: "Summary of functions",
+  q: `Match each function with what it does.`,
+  pairs: [ [`«cv2.imwrite(filename, img)»`, `Saves an image; the extension (.png, .jpg) chooses the format`],
+           [`«cv2.rectangle(img, p1, p2, colour, -1)»`, `Draws a filled rectangle, such as the dark bar`],
+           [`«cv2.putText(img, text, (x, y), ...)»`, `Writes text; (x, y) is its bottom-left corner`],
+           [`«cv2.imshow(name, img)»`, `Shows an image in a window`],
+           [`«cap.release()»`, `Frees the camera for other programs`] ],
+  why: `These are the drawing, showing and saving functions of the selfie studio.` },
+{ lab: 1, type: "line", see: "Part 3 · Example 3.2 (keys.py)",
+  q: `In «keys.py», every press of s must save a new file and never overwrite the previous one. Click the line that gives each snapshot its new number.`,
+  lines: [`key = chr(cv2.waitKey(1) & 0xFF)`, `if key == "s":`, `    count += 1`, `    cv2.imwrite(f"snapshot_{count}.png", frame)`, `    print(f"Saved snapshot_{count}.png")`, `elif key == "q":`, `    break`], a: 2,
+  why: `«count += 1» raises the number before each save, so the names are snapshot_1.png, snapshot_2.png, ... With a fixed name, every snapshot would replace the last.` },
+{ lab: 1, type: "tf", see: "Part 2 · Exercise 2.1",
+  q: `For a frame of height h and width w, «frame[h, w]» is the pixel in the bottom-right corner.`, a: false,
+  why: `Indices start at 0, so the last row is h − 1 and the last column w − 1. «frame[h - 1, w - 1]» is the bottom-right pixel; «frame[h, w]» raises an IndexError.` },
+{ lab: 1, type: "line", see: "Part 1 · Figure 2 (the live loop)",
+  q: `Every live program reads a frame, processes it, shows it and checks the keys. Click the line of this loop that will be replaced when an AI model is added in Lab 4.`,
+  lines: [`while True:`, `    ret, frame = cap.read()`, `    if not ret:`, `        break`, `    frame = cv2.flip(frame, 1)`, `    cv2.imshow("Webcam", frame)`, `    if cv2.waitKey(1) & 0xFF == ord("q"):`, `        break`], a: 4,
+  why: `«cv2.flip» is the processing step, the only step that changes from lab to lab. In Lab 1 it applies a filter, in Lab 2 it finds a colour, and from Lab 4 on a neural network runs there.` },
+
+/* ---------------- Lab 2 ---------------- */
+{ lab: 2, type: "mc", see: "Part 1 · Colour as a number: the hue",
+  q: `Why is it easier to select a coloured object in HSV than in BGR?`,
+  opts: [`The hue of an object stays almost the same in light and in shadow, while all three BGR values change`, `HSV images take less memory`, `The camera delivers its frames in HSV`, `HSV has more colours than BGR`], a: 0,
+  why: `HSV separates the colour itself (H) from its strength (S) and brightness (V). Light and shadow mostly change V, so a range of hues still selects the object.` },
+{ lab: 2, type: "mc", see: "Part 1 · Figure 1 (the hue scale)",
+  q: `Which range does OpenCV use for the hue H of an 8-bit image?`,
+  opts: [`0 to 179`, `0 to 255`, `0 to 360`, `0 to 100`], a: 0,
+  why: `The colour wheel has 360°, which does not fit in one byte, so OpenCV stores the angle divided by 2: 0 to 179.` },
+{ lab: 2, type: "slider", see: "Part 1 · Figure 1 (the hue scale)",
+  q: `Yellow sits at 60° on the colour wheel. Set the slider to the hue that OpenCV stores for yellow.`, min: 0, max: 179, start: 90, a: 30, tol: 2, strip: "hue", label: "H",
+  why: `OpenCV stores the angle divided by 2: 60° / 2 = 30. A pure yellow pixel (0, 255, 255) has H = 30.` },
+{ lab: 2, type: "mc", see: "Part 1 · Figure 1 (the hue scale)",
+  q: `Blue sits at 240° on the colour wheel. Which hue does «cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)» give a pure blue pixel «(255, 0, 0)»?`,
+  opts: [`120`, `240`, `100`, `60`], a: 0,
+  why: `240° / 2 = 120. That is why the blue range of the lab, 100 to 130, is around 120.` },
+{ lab: 2, type: "swatch", see: "Part 1 · Figure 1 (the hue scale)",
+  q: `Which of these colours has a hue near 120 in OpenCV?`,
+  opts: ["rgb(20,60,200)", "rgb(40,200,40)", "rgb(220,40,40)", "rgb(230,210,40)"], a: 0,
+  why: `Hue 120 in OpenCV is 240° on the wheel: blue. Green is near 60, red near 0 (or 179) and yellow near 30.` },
+{ lab: 2, type: "mc", see: "Part 1 · Figure 1, and Troubleshooting",
+  q: `Why does red need two hue ranges in OpenCV, while blue needs only one?`,
+  opts: [`Red lies at both ends of the hue scale, near 0 and near 179`, `Red has two saturations`, `Cameras record red in two channels`, `Red is darker than blue`], a: 0,
+  why: `The hue is an angle on a circle, and red sits where the circle starts and ends. A red pen has hues around 0 and around 175, so one range covers only half of it.` },
+{ lab: 2, type: "mc", see: "Part 1 · Exercise 1.2",
+  q: `With «hue.py» you point the circle at white paper, then at a blue pen. Which value tells the white paper from the coloured pen most clearly?`,
+  opts: [`S, the saturation: close to 0 for white and grey, high for a strong colour`, `V, the value`, `H, the hue`, `None of them: they are the same`], a: 0,
+  why: `White, grey and black have almost no colour, so their saturation is low. A strong colour such as the blue pen has a high S.` },
+{ lab: 2, type: "tf", see: "Part 1 · Example 1.1 (hue.py)",
+  q: `When the pen moves into a shadow, its V falls but its H hardly changes.`, a: true,
+  why: `Shadow makes the pen darker (V) but does not change its colour (H). This is why a range of hues finds the pen in light and in shadow.` },
+{ lab: 2, type: "mc", see: "Part 2 · Example 2.1 (mask.py)",
+  q: `Which values can a mask made by «cv2.inRange(hsv, low, high)» hold?`,
+  opts: [`Only 0 (black) and 255 (white)`, `Any value from 0 to 255`, `Any value from 0 to 179`, `Only True and False`], a: 0,
+  why: `A pixel is 255 when all three of its H, S and V values are inside the range, and 0 otherwise.` },
+{ lab: 2, type: "mc", see: "Part 2 · Example 2.1 (mask.py)",
+  q: `What is the shape of the mask «cv2.inRange(hsv, low, high)» for a 640 × 480 frame?`,
+  opts: [`«(480, 640)»`, `«(480, 640, 3)»`, `«(640, 480)»`, `«(480, 640, 2)»`], a: 0,
+  why: `The mask has one value per pixel, like a grayscale image: (height, width).` },
+{ lab: 2, type: "pic", scene: "mask", target: "blue", see: "Part 2 · A mask of one colour",
+  q: `The first picture has six patches: strong blue, navy, pale blue, green, red and white. Which picture is the mask of «cv2.inRange(hsv, (100, 100, 60), (130, 255, 255))»?`,
+  why: `Only the strong blue patch (H 113, S 230, V 200) is inside all three limits. Navy has the right hue (116) but is too dark (V 45 < 60). Pale blue is too grey (S 67 < 100). Green has H 62.` },
+{ lab: 2, type: "mc", see: "Part 2 · Exercise 2.2",
+  q: `Why does the blue range start at S = 100 and V = 60, and not at 0?`,
+  opts: [`To leave out grey or pale pixels (low S) and very dark pixels (low V)`, `To make the program run faster`, `Because OpenCV does not accept 0 in a range`, `To include more shades of blue`], a: 0,
+  why: `Grey, pale and very dark pixels can have any hue. The lower limits on S and V keep only pixels with a clear, strong colour.` },
+{ lab: 2, type: "tf", see: "Part 2 · Example 2.1 (mask.py)",
+  q: `A mask selects an object, so a blue shirt in view can never become part of the mask of a blue pen.`, a: false,
+  why: `A mask selects a colour, not an object. Anything blue enough in view turns white in the mask: a shirt, a chair, a poster.` },
+{ lab: 2, type: "multi", see: "Troubleshooting",
+  q: `The air painter starts with the blue range (100, 100, 60) to (130, 255, 255). Which of these, in view of the camera, can turn white in the mask and confuse the painter?`,
+  opts: [`A bright blue shirt`, `A blue poster on the wall`, `A white wall`, `A black jacket in a dark corner`, `A green plant`], a: [0, 1],
+  why: `Strong blue things are inside the range. A white wall has a saturation near 0, a black jacket in the dark has a V below 60, and green has a hue near 60.` },
+{ lab: 2, type: "mc", see: "Part 3 · From a mask to a position",
+  q: `In «cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)», what does «cv2.RETR_EXTERNAL» ask for?`,
+  opts: [`Only the outer outlines of the white regions, not the outlines of holes inside them`, `Only the contours that touch the border of the picture`, `The outlines of the black regions`, `Only the largest contour`], a: 0,
+  why: `RETR_EXTERNAL returns one outer outline per white region. The largest one is chosen afterwards with «max».` },
+{ lab: 2, type: "mc", see: "Part 3 · Example 3.1 (tracker.py)",
+  q: `What does «contour = max(contours, key=cv2.contourArea)» give?`,
+  opts: [`The contour with the largest area`, `The contour with the most points`, `The contour farthest to the right`, `The last contour that was found`], a: 0,
+  why: `«key=cv2.contourArea» tells «max» to compare the contours by their area. The largest region of the colour is taken to be the pen.` },
+{ lab: 2, type: "line", see: "Part 3 · Example 3.1 (tracker.py)",
+  q: `The pen leaves the picture, so the mask is all black and «contours» is an empty list. Click the line that keeps the program from crashing.`,
+  lines: [`contours, _ = cv2.findContours(`, `    mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)`, `if contours:`, `    contour = max(contours, key=cv2.contourArea)`, `    moments = cv2.moments(contour)`, `    if moments["m00"] > 300:`, `        cx = int(moments["m10"] / moments["m00"])`], a: 2,
+  why: `«max» of an empty list raises a ValueError. «if contours:» is False for an empty list, so the program skips that part when the pen is not in view.` },
+{ lab: 2, type: "mc", see: "Part 3 · From a mask to a position",
+  q: `What is the moment «m00» of a contour?`,
+  opts: [`Its area in pixels`, `Its perimeter`, `The x of its centre`, `Its mean colour`], a: 0,
+  why: `m00 sums 1 over the shape, so it is the area. m10 / m00 and m01 / m00 are the x and the y of the centre.` },
+{ lab: 2, type: "mc", see: "Part 3 · From a mask to a position",
+  q: `A contour has m00 = 400, m10 = 48,000 and m01 = 20,000. Where is its centre (cx, cy)?`,
+  opts: [`(120, 50)`, `(50, 120)`, `(48, 20)`, `(120, 400)`], a: 0,
+  why: `cx = m10 / m00 = 48,000 / 400 = 120 and cy = m01 / m00 = 20,000 / 400 = 50.` },
+{ lab: 2, type: "mc", see: "Part 3 · Exercise 3.1",
+  q: `Why does the program ignore a contour when «moments["m00"]» is 300 or less?`,
+  opts: [`Small specks of the colour are not the pen; when the pen leaves the picture, no dot is drawn`, `OpenCV cannot compute the moments of small contours`, `To save memory`, `The centre of a small contour is always (0, 0)`], a: 0,
+  why: `A few pixels of the right colour appear in many pictures. A smallest area keeps the painter from following them.` },
+{ lab: 2, type: "blanks", see: "Part 3 · Example 3.1 (tracker.py)",
+  q: `Complete the centre of the pen in «lab02_air_painter.py».`,
+  code: `moments = cv2.{0}(contour)\nif moments["m00"] > 300:\n    cx = int(moments["{1}"] / moments["m00"])\n    cy = int(moments["{2}"] / moments["m00"])\n    center = (cx, cy)`,
+  blanks: [ { opts: ["moments", "contourArea", "boundingRect"], a: 0 },
+            { opts: ["m10", "m01", "m00"], a: 0 },
+            { opts: ["m01", "m10", "m00"], a: 0 } ],
+  why: `«cv2.moments» returns all the moments as a dictionary. m10 sums the x of every pixel and m01 their y, so dividing by the area gives the centre.` },
+{ lab: 2, type: "order", see: "Project · Air painter (lab02_air_painter.py)",
+  q: `Put the steps of one frame of the air painter in order.`,
+  items: [`Read a frame and mirror it`, `Convert it to HSV`, `Make the mask with «cv2.inRange»`, `Find the contours of the mask`, `Take the largest contour and its moments`, `Compute the centre (cx, cy)`, `Draw a line on the canvas from the last centre to the new one`, `Copy the painted pixels of the canvas onto the frame and show it`],
+  why: `Colour, then mask, then shape, then position. The line goes on the canvas, and the canvas is copied onto each new frame before it is shown.` },
+{ lab: 2, type: "blanks", see: "Project · step 4 and Hint",
+  q: `The hue in the middle of the picture is 5 and you press t. The air painter computes «max(hue - 10, 0)» and «min(hue + 10, 179)». Complete the new range.`,
+  code: `hue = 5\nlow = ({0}, 100, 60)\nhigh = ({1}, 255, 255)`,
+  blanks: [ { opts: ["0", "-5", "5", "10"], a: 0 }, { opts: ["15", "10", "179", "20"], a: 0 } ],
+  why: `5 − 10 = −5, and «max(-5, 0)» keeps it at 0, because there is no hue below 0. 5 + 10 = 15 is below 179, so it stays. S and V keep their limits of 100 and 60.` },
+{ lab: 2, type: "mc", see: "Project · step 3",
+  q: `Why does the air painter draw its lines on a separate canvas and not on the frame?`,
+  opts: [`Every frame is a new picture from the camera: lines drawn on it would be gone in the next frame`, `OpenCV does not allow drawing on a camera frame`, `The canvas is shown faster`, `The canvas makes the colour mask work`], a: 0,
+  why: `The canvas is made once and keeps every line. Each new frame gets the painted pixels copied onto it.` },
+{ lab: 2, type: "mc", see: "Project · Hint",
+  q: `What is «painted = canvas.any(axis=2)»?`,
+  opts: [`A mask that is True for every pixel of the canvas that is not black (any of B, G, R not 0)`, `A mask that is True where all three values are 255`, `The pixels of the pen in the frame`, `The number of painted pixels`], a: 0,
+  why: `«axis=2» looks along the three channels of each pixel. «output[painted] = canvas[painted]» then copies only the painted pixels.` },
+{ lab: 2, type: "mc", see: "Project · Hint",
+  q: `The code sets «previous_center = center» in every frame, even when «center» is None. What does this prevent?`,
+  opts: [`A line jumping across the picture when the pen comes back after it was lost`, `The canvas filling with black`, `An error in «cv2.moments»`, `The mask turning white`], a: 0,
+  why: `When the pen is lost, «previous_center» becomes None, and the next line is drawn only once two centres in a row are known.` },
+{ lab: 2, type: "line", see: "Part 2 · Example 2.1 (mask.py)",
+  q: `This tracker follows the wrong things in the picture. Click the line with the mistake.`,
+  lines: [`low = (100, 100, 60)`, `high = (130, 255, 255)`, `hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)`, `mask = cv2.inRange(frame, low, high)`, `contours, _ = cv2.findContours(`, `    mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)`], a: 3,
+  why: `The range is in HSV, but «cv2.inRange» gets the BGR «frame». It must be «cv2.inRange(hsv, low, high)».` },
+{ lab: 2, type: "match", see: "Summary of functions",
+  q: `Match each piece of the air painter with what it does.`,
+  pairs: [ [`«cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)»`, `The frame as hue, saturation and value`],
+           [`«cv2.inRange(hsv, low, high)»`, `A mask: white where the colour is inside the range`],
+           [`«np.zeros_like(frame)»`, `A black image of the same size: the canvas`],
+           [`«cv2.line(canvas, p1, p2, (0, 0, 255), 8)»`, `Draws a red line, 8 pixels thick`],
+           [`«canvas[:] = 0»`, `Clears the painting (the key c)`] ],
+  why: `(0, 0, 255) is red in BGR. «canvas[:] = 0» sets every value of the canvas to 0, black.` },
+
+/* ---------------- Lab 3 ---------------- */
+{ lab: 3, type: "mc", see: "the introduction of Lab 3",
+  q: `In Lab 2 you wrote the rules yourself: a hue range and a smallest area. What replaces the rules in machine learning?`,
+  opts: [`Examples: images together with the right answer`, `Longer and more exact rules`, `A faster camera`, `Random guesses`], a: 0,
+  why: `Nobody can write rules for every way to write a 3. A learning method compares a new image with examples whose answers are known.` },
+{ lab: 3, type: "mc", see: "Part 1 · Example 1.1 (the_digits.py)",
+  q: `How many handwritten digits does «load_digits()» of scikit-learn hold?`,
+  opts: [`1,797`, `10`, `64`, `60,000`], a: 0,
+  why: `1,797 digits, about 180 of each digit from 0 to 9, each with its label.` },
+{ lab: 3, type: "mc", see: "Part 1 · A digit as 64 numbers",
+  q: `What is each digit image of this dataset?`,
+  opts: [`8 × 8 pixels, each from 0 (no ink) to 16 (full ink)`, `28 × 28 pixels, each from 0 to 255`, `8 × 8 pixels, each from 0 to 255`, `64 × 64 pixels, each 0 or 1`], a: 0,
+  why: `The images are tiny: 8 × 8 = 64 pixels with values from 0 to 16. That is why a camera digit must be turned into the same 8 × 8, 0 to 16 form.` },
+{ lab: 3, type: "mc", see: "Part 1 · Example 1.1 (the_digits.py)",
+  q: `What is «digits.data.shape»?`,
+  opts: [`«(1797, 64)»`, `«(1797, 8, 8)»`, `«(64, 1797)»`, `«(1797,)»`], a: 0,
+  why: `«digits.data» holds each image as one row of 64 numbers. «digits.images» holds the same numbers as 8 × 8 images, (1797, 8, 8).` },
+{ lab: 3, type: "digit", see: "Part 1 · Example 1.1 (the_digits.py)",
+  q: `These are the 8 × 8 numbers of «digits.images[0]», drawn dark where there is ink. Which digit is it?`,
+  opts: ["0", "6", "8", "9"], a: 0,
+  why: `The ink (large numbers) forms a ring around zeros in the middle: a 0. Its label «digits.target[0]» is 0.` },
+{ lab: 3, type: "slider", see: "Part 2 · the distance formula",
+  q: `Two tiny images have the numbers a = (1, 2) and b = (4, 6). Set the slider to their distance d(a, b).`, min: 0, max: 12, start: 10, a: 5, tol: 0, strip: "none", label: "d",
+  why: `d = √((4 − 1)² + (6 − 2)²) = √(9 + 16) = √25 = 5. For digits the same sum runs over all 64 numbers.` },
+{ lab: 3, type: "mc", see: "Part 2 · The nearest neighbour",
+  q: `How does the nearest-neighbour rule answer for a new digit?`,
+  opts: [`With the label of the example at the smallest distance`, `With the label of the example at the largest distance`, `With the most common label of the dataset`, `With the average of all labels`], a: 0,
+  why: `Similar images have similar numbers, so the most similar example, the nearest one, probably shows the same digit.` },
+{ lab: 3, type: "mc", see: "Part 2 · Example 2.1 (nearest.py)",
+  q: `What does «model.fit(examples, labels)» do for a «KNeighborsClassifier»?`,
+  opts: [`It only stores the examples and their labels`, `It writes rules about the shape of each digit`, `It draws the digits on the screen`, `It deletes the examples that look wrong`], a: 0,
+  why: `k-NN has nothing to compute in advance. The work comes in «predict», which measures the distance from the new digit to the stored examples.` },
+{ lab: 3, type: "mc", see: "Part 2 · Example 2.1 (nearest.py)",
+  q: `In «nearest.py» the last ten digits are put aside before «fit». Why?`,
+  opts: [`So that they are new to the classifier: a test on digits it has already stored would tell us nothing`, `Because «fit» accepts at most 1,787 examples`, `To make «fit» faster`, `Because the last ten digits are wrong`], a: 0,
+  why: `With k = 1, a stored digit is always its own nearest example, at distance 0, so it would always be read right. Only new digits show how well the classifier reads.` },
+{ lab: 3, type: "mc", see: "Part 2 · Exercise 2.2",
+  q: `In «nearest.py» the fourth new digit, an 8, is read as a 1. You append it to «examples», append 8 to «labels», and call «fit» again. What does the classifier now read for this digit?`,
+  opts: [`8: its nearest example is now the digit itself, at distance 0`, `1, as before`, `It raises an error`, `A different digit each time`], a: 0,
+  why: `This is teaching by example: one added example corrects the answer for this digit, and for digits very similar to it.` },
+{ lab: 3, type: "mc", fixed: true, see: "Part 2 · The nearest neighbour",
+  q: `The three nearest examples of a new digit have the labels 8 (the nearest), 3 and 3. What does the classifier answer with k = 1, and with k = 3?`,
+  opts: [`k = 1: 8, and k = 3: 3`, `8 both times`, `3 both times`, `k = 1: 3, and k = 3: 8`], a: 0,
+  why: `With k = 1 only the nearest decides: 8. With k = 3 the three nearest vote, and 3 wins two votes to one.` },
+{ lab: 3, type: "mc", see: "Project · Digit reader",
+  q: `The digit reader of the lab sheet uses k = 1. Why could one taught example often not be enough with k = 3?`,
+  opts: [`The taught example is only one vote of three: two other neighbours with a wrong label can outvote it`, `With k = 3, fit ignores new examples`, `k = 3 needs three cameras`, `With k = 3 the examples cannot be kept in lists`], a: 0,
+  why: `With k = 3 you would need to teach the same digit two or three times before it wins the vote.` },
+{ lab: 3, type: "mc", see: "Part 3 · Example 3.1 (box.py)",
+  q: `«roi = frame[y1:y2, x1:x2]» cuts the box out of the frame. Which statement is true?`,
+  opts: [`Rows (y) come first, then columns (x); the rows y1 to y2 − 1 are kept`, `Columns come first, then rows`, `The rows y1 to y2 are kept, y2 included`, `It makes a new, larger frame`], a: 0,
+  why: `Slicing follows «frame[y, x]»: rows first. As in all Python slices, the end y2 is not included.` },
+{ lab: 3, type: "mc", see: "Part 3 · Example 3.1 (box.py)",
+  q: `In «lab03_digit_reader.py»: «x, y = w//2-100, h//2-100» and «roi = frame[y:y+200, x:x+200]». For a 640 × 480 frame, where is the top-left corner (x, y) of the box?`,
+  opts: [`(220, 140)`, `(140, 220)`, `(320, 240)`, `(100, 100)`], a: 0,
+  why: `x = 640 / 2 − 100 = 220 and y = 480 / 2 − 100 = 140. The box runs from (220, 140) to (420, 340), 200 × 200 pixels in the middle.` },
+{ lab: 3, type: "mc", see: "Part 3 · Example 3.1 (box.py)",
+  q: `Unlike the selfie studio and the air painter, the digit reader does not mirror the frame. Why?`,
+  opts: [`A mirrored digit could not be read: the examples are not mirrored`, `«cv2.flip» does not work on gray images`, `Mirroring would make the program too slow`, `The camera mirrors by itself`], a: 0,
+  why: `A mirrored 3 looks like an Ɛ, and no example looks like that. The classifier only knows digits as they are written.` },
+{ lab: 3, type: "mc", see: "Part 3 · Example 3.1 (box.py)",
+  q: `In «cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)», what does «cv2.THRESH_BINARY_INV» do?`,
+  opts: [`Dark pixels (ink) become 255 and light pixels (paper) 0, so the ink is white like the ink of the dataset`, `Light pixels become 255 and dark pixels 0`, `It inverts the colours of the frame`, `It chooses the threshold`], a: 0,
+  why: `Without INV the light paper would be white. The dataset has large numbers where the ink is, so the ink must become the bright part.` },
+{ lab: 3, type: "mc", see: "Part 3 · Example 3.1 (box.py)",
+  q: `In «cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)», what does «cv2.THRESH_OTSU» add?`,
+  opts: [`It chooses the threshold by itself, between the dark ink and the light paper; the 0 given is ignored`, `It smooths the image`, `It finds the contours`, `It makes the threshold always 128`], a: 0,
+  why: `Otsu's method looks at the brightness values of the box and picks the threshold that separates them best into two groups.` },
+{ lab: 3, type: "mc", see: "Part 3 · Exercise 3.1",
+  q: `You hold empty paper in the box. Why can the program still read a digit there?`,
+  opts: [`Otsu's threshold always splits the box into two parts, so faint shadows and noise become ink`, `The classifier remembers the last digit`, `Empty paper is the digit 0 in the dataset`, `The camera adds a digit by itself`], a: 0,
+  why: `Otsu always finds some threshold, even when there is nothing to separate. The lab sheet's project therefore reads only when the contrast of the box, «int(gray.max()) - int(gray.min())», is large.` },
+{ lab: 3, type: "order", see: "Part 3 · Figure 3",
+  q: `Put the steps from the camera picture to a prediction in order.`,
+  items: [`Cut the 200 × 200 box out of the frame`, `Convert the box to grayscale`, `Threshold it with Otsu, inverted: the ink becomes white`, `Find the contours and take the largest: the digit`, `Take its bounding box with «cv2.boundingRect»`, `Put the digit in the middle of a black square`, `Shrink the square to 8 × 8 and scale it to 0 to 16`, `Predict the digit with the classifier`],
+  why: `Each step brings the camera picture closer to the form of the examples: ink white on black, the digit filling the picture, 8 × 8 numbers from 0 to 16.` },
+{ lab: 3, type: "pic", scene: "one", target: "sq", see: "Part 3 · Example 3.2 (digit_8x8.py) and Exercise 3.2",
+  q: `The program cuts a handwritten 1 out of the box: a narrow upright bar, 12 pixels wide and 60 pixels high. As in Example 3.2, it puts the bar in the middle of a black square and shrinks the square to 8 × 8. Which picture comes out (dark = ink)?`,
+  why: `The square is 60 × 60 with the bar in its middle, so the 8 × 8 picture keeps a narrow upright stroke in columns 3 and 4, like the 1s of the dataset. Shrunk straight to 8 × 8 without the square, the bar would fill the whole picture: a thick block, nothing like a 1.` },
+{ lab: 3, type: "mc", see: "lab03_digit_reader.py (the core program)",
+  q: `The bounding box of a digit is c = 30 pixels wide and d = 50 pixels high. With the code of «lab03_digit_reader.py» below, how large is «square»?`,
+  code: `size = max(c, d) + 20\nsquare = cv2.copyMakeBorder(\n    crop, (size-d)//2, (size-d+1)//2,\n    (size-c)//2, (size-c+1)//2,\n    cv2.BORDER_CONSTANT, value=0\n)`,
+  opts: [`70 × 70`, `50 × 50`, `30 × 50`, `80 × 80`], a: 0,
+  why: `size = 50 + 20 = 70. The border adds 10 + 10 rows and 20 + 20 columns, so 50 + 20 = 70 rows and 30 + 40 = 70 columns: a square with a margin around the digit.` },
+{ lab: 3, type: "line", see: "Part 3 · Example 3.2 (digit_8x8.py)",
+  q: `In «lab03_digit_reader.py», click the line that brings the digit to the scale of the examples, 0 to 16.`,
+  lines: [`crop = img[b:b+d, a:a+c]`, `size = max(c, d) + 20`, `square = cv2.copyMakeBorder(crop, (size-d)//2, (size-d+1)//2, (size-c)//2, (size-c+1)//2, cv2.BORDER_CONSTANT, value=0)`, `digit = cv2.resize(square, (8, 8)).flatten() / 255 * 16`, `cv2.putText(frame, str(model.predict([digit])[0]), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)`], a: 3,
+  why: `The pixels of the square go from 0 to 255, the examples from 0 to 16. «/ 255 * 16» turns 255 into 16 and keeps 0 at 0. Distances only make sense when the new digit and the examples use the same scale.` },
+{ lab: 3, type: "mc", see: "Project · Digit reader",
+  q: `The program calls «model.predict([digit])[0]». Why the brackets around «digit», and the «[0]»?`,
+  opts: [`«predict» takes a list of images and returns a list of answers: «[digit]» is a list of one, and «[0]» is its answer`, `«[0]» means k = 0`, `The brackets make the digit 8 × 8`, `«[0]» takes the first pixel`], a: 0,
+  why: `scikit-learn always works on many samples at once. One digit is passed as a list of one, and the first (and only) answer is taken out.` },
+{ lab: 3, type: "mc", see: "Troubleshooting",
+  q: `The program stops with «ValueError: X has 63 features, but KNeighborsClassifier is expecting 64». What is wrong?`,
+  opts: [`The new digit is not exactly 8 × 8 = 64 numbers`, `The camera is not open`, `k is too large`, `The dataset is missing`], a: 0,
+  why: `The classifier learned from rows of 64 numbers. Every new digit must have exactly the same 64 numbers.` },
+{ lab: 3, type: "multi", see: "Project · step 5",
+  q: `In the digit reader of the lab sheet you press the key 8 while it shows a wrong answer. What happens?`,
+  opts: [`The 64 numbers of the digit in the box are added to the examples`, `The label 8 is added to the labels`, `The classifier is trained again with «fit»`, `The digits dataset on the disk is changed`, `All examples of the wrong digit are deleted`], a: [0, 1, 2],
+  why: `Teaching only adds one example to the two lists in memory and calls «fit» again, which is fast for k-NN. Nothing is saved to the disk, and nothing is deleted.` },
+{ lab: 3, type: "line", see: "Part 3 · Example 3.1 (box.py)",
+  q: `This digit reader cuts the wrong part of the frame. Click the line with the mistake.`,
+  lines: [`h, w = frame.shape[:2]`, `x, y = w // 2 - 100, h // 2 - 100`, `roi = frame[x:x + 200, y:y + 200]`, `gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)`, `cv2.rectangle(frame, (x, y), (x + 200, y + 200), (255, 150, 0), 2)`], a: 2,
+  why: `Slicing takes the rows first: «frame[y:y + 200, x:x + 200]». The rectangle is right, because drawing takes (x, y).` },
+{ lab: 3, type: "blanks", see: "Part 2 · Example 2.1 (nearest.py)",
+  q: `Complete the classifier so that only the nearest example decides.`,
+  code: `from sklearn.datasets import load_digits\nfrom sklearn.neighbors import {0}\n\ndata = load_digits()\nmodel = KNeighborsClassifier(n_neighbors={1}).{2}(data.data, data.{3})\nanswer = model.{4}([digit])[0]`,
+  blanks: [ { opts: ["KNeighborsClassifier", "load_digits", "KMeans"], a: 0 },
+            { opts: ["1", "3", "10", "64"], a: 0 },
+            { opts: ["fit", "predict", "store"], a: 0 },
+            { opts: ["target", "images", "labels"], a: 0 },
+            { opts: ["predict", "fit", "score"], a: 0 } ],
+  why: `n_neighbors=1 lets only the nearest example decide. The labels of the dataset are in «data.target»; «fit» trains and «predict» reads.` },
+{ lab: 3, type: "match", see: "Summary of functions",
+  q: `Match each function with what it does.`,
+  pairs: [ [`«load_digits()»`, `1,797 handwritten digits with their labels`],
+           [`«cv2.boundingRect(c)»`, `The box (x, y, w, h) around a contour`],
+           [`«cv2.copyMakeBorder(...)»`, `Adds a border around an image, here black`],
+           [`«cv2.resize(img, size, interpolation=cv2.INTER_NEAREST)»`, `Enlarges an image without smoothing: each pixel becomes a square`],
+           [`«KNeighborsClassifier(n_neighbors=3)»`, `Answers with the label that most of the 3 nearest examples have`] ],
+  why: `These are the pieces of the digit reader: the examples, the box around the digit, the square, the enlarged 8 × 8 picture and the classifier.` }
+];
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const fmt = s => esc(s).replace(/«(.+?)»/g, "<code>$1</code>");
+/* Python colouring for code blocks: comments, strings, numbers, keywords, function names */
+const PY_KW = new Set("import from as if elif else while for in not and or is True False None break continue def return raise lambda with".split(" "));
+function hl(src) {
+  const re = /(#.*$)|(f?"(?:[^"\\\n]|\\.)*"|f?'(?:[^'\\\n]|\\.)*')|(\b(?:0[xX][0-9a-fA-F]+|\d+(?:\.\d+)?)\b)|([A-Za-z_]\w*)(?=\s*\()|([A-Za-z_]\w*)/gm;
+  let out = "", last = 0, m;
+  while ((m = re.exec(src))) {
+    out += esc(src.slice(last, m.index)); last = re.lastIndex;
+    const t = esc(m[0]);
+    if (m[1]) out += `<span class="tk-c">${t}</span>`;
+    else if (m[2]) out += `<span class="tk-s">${t}</span>`;
+    else if (m[3]) out += `<span class="tk-n">${t}</span>`;
+    else if (m[4]) out += `<span class="${PY_KW.has(m[4]) ? "tk-k" : "tk-f"}">${t}</span>`;
+    else out += PY_KW.has(m[5]) ? `<span class="tk-k">${t}</span>` : t;
+  }
+  return out + esc(src.slice(last));
+}
+const CH = { 1: "B", 2: "G", 3: "R" };   /* each lab wears one channel of an OpenCV pixel */
+function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function shuffle(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const range = n => Array.from({ length: n }, (_, i) => i);
+const LETTERS = "ABCDEFGH";
+const newSeed = () => Math.floor(Math.random() * 1e9);
+
+/* ---------- state ---------- */
+const store = {
+  load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } },
+  save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* storage blocked: the quiz still works */ } },
+  clear() { try { localStorage.removeItem(KEY); } catch (e) {} }
+};
+/* ids: the questions of this round (null = all); mastered: ids answered right in any round */
+/* cur: the question on screen (ORDER index; ORDER.length = the results screen) */
+const fresh = () => ({ seed: newSeed(), ans: {}, done: {}, finished: false, finishedAt: null, student: null, round: 1, ids: null, mastered: [], cur: 0 });
+let S = store.load();
+if (!S || typeof S.seed !== "number" || !S.ans || !S.done) S = fresh();
+if (!S.round) S.round = 1;
+if (typeof S.cur !== "number") S.cur = 0;
+if (!Array.isArray(S.mastered)) S.mastered = [];
+if (!Array.isArray(S.ids)) S.ids = null;
+const save = () => store.save(S);
+
+/* fixed identity of each question: q1-01 ... (the shown number depends on the round's order) */
+const counters = {};
+Q.forEach(q => { counters[q.lab] = (counters[q.lab] || 0) + 1; q.id = `q${q.lab}-${String(counters[q.lab]).padStart(2, "0")}`; });
+let ORDER = [], REF = {};
+function arrange() {
+  ORDER = []; REF = {};
+  LABS.forEach(l => {
+    const qs = shuffle(Q.filter(q => q.lab === l.id && (!S.ids || S.ids.includes(q.id))), rng(S.seed ^ (l.id * 7919)));
+    qs.forEach((q, k) => REF[q.id] = `${l.id}.${String(k + 1).padStart(2, "0")}`);
+    ORDER.push(...qs);
+  });
+}
+function master(q) { if (S.done[q.id] && !S.mastered.includes(q.id)) S.mastered.push(q.id); }
+
+/* ---------- pictures (computed, not stored) ---------- */
+const FILTER_BGR = [[40, 40, 220], [60, 180, 40], [200, 80, 30], [40, 220, 240], [245, 245, 245], [177, 192, 209]];
+const MASK_BGR = [[200, 60, 20], [45, 15, 10], [230, 190, 170], [40, 170, 30], [30, 30, 200], [240, 240, 240]];
+const gray = (b, g, r) => Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+function hsv(b, g, r) { /* OpenCV 8-bit HSV: H 0-179, S and V 0-255 */
+  const v = Math.max(r, g, b), mn = Math.min(r, g, b), d = v - mn;
+  const s = v === 0 ? 0 : Math.round(255 * d / v);
+  let h = 0;
+  if (d !== 0) { if (v === r) h = 60 * (g - b) / d; else if (v === g) h = 120 + 60 * (b - r) / d; else h = 240 + 60 * (r - g) / d; }
+  if (h < 0) h += 360;
+  return [Math.round(h / 2), s, v];
+}
+const inRange = (p, lo, hi) => p.every((x, i) => x >= lo[i] && x <= hi[i]);
+const FILTERS = {
+  orig: p => [p[2], p[1], p[0]],
+  nb: p => [p[2], p[1], 0],
+  neg: p => [255 - p[2], 255 - p[1], 255 - p[0]],
+  gray: p => { const y = gray(p[0], p[1], p[2]); return [y, y, y]; },
+  red: p => [p[2], p[2], p[2]]
+};
+const MASKS = {
+  blue: [[100, 100, 60], [130, 255, 255]],
+  loose: [[100, 20, 20], [130, 255, 255]],
+  dark: [[100, 100, 20], [130, 255, 255]],
+  green: [[35, 100, 60], [85, 255, 255]]
+};
+const maskFn = key => p => inRange(hsv(p[0], p[1], p[2]), MASKS[key][0], MASKS[key][1]) ? [255, 255, 255] : [0, 0, 0];
+/* cv2.flip on the 3 x 2 patches: h = code 1, v = code 0, hv = code -1 */
+const flipPatches = (p, k) => p.map((_, i) => { let c = i % 3, r = Math.floor(i / 3); if (k === "h" || k === "hv") c = 2 - c; if (k === "v" || k === "hv") r = 1 - r; return p[r * 3 + c]; });
+/* 8 x 8 pictures of a narrow bar (a 1): in a square, stretched, lying, not centred */
+const grid8 = f => range(8).map(y => range(8).map(x => f(x, y)));
+const ONES = {
+  sq: grid8(x => (x === 3 || x === 4) ? 13 : 0),
+  st: grid8(() => 16),
+  band: grid8((x, y) => (y === 3 || y === 4) ? 13 : 0),
+  left: grid8(x => x < 2 ? 13 : 0)
+};
+const SCENES = {
+  filters: { variants: ["nb", "neg", "gray", "red"], make: (k, c) => patchCanvas(FILTER_BGR, FILTERS[k], c),
+             src: c => patchCanvas(FILTER_BGR, FILTERS.orig, c), cap: "The frame: red, green, blue, yellow, white and skin-coloured patches." },
+  mask: { variants: ["blue", "loose", "dark", "green"], make: (k, c) => patchCanvas(MASK_BGR, maskFn(k), c),
+          src: c => patchCanvas(MASK_BGR, FILTERS.orig, c), cap: "The frame: strong blue, navy, pale blue (top), green, red, white (bottom)." },
+  flip: { variants: ["h", "v", "hv", "orig"], make: (k, c) => patchCanvas(flipPatches(FILTER_BGR, k), FILTERS.orig, c),
+          src: c => patchCanvas(FILTER_BGR, FILTERS.orig, c), cap: "The frame from the camera: red, green, blue on top; yellow, white, skin below." },
+  one: { variants: ["sq", "st", "band", "left"], make: k => digitCanvas(ONES[k], 12) }
+};
+function patchCanvas(patches, fn, cell = 46) {
+  /* a mid-grey frame and gaps, so that white and black patches both stand out on any page colour */
+  const cols = 3, rows = 2, gap = 4, dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+  const W = cols * cell + (cols + 1) * gap, H = rows * cell + (rows + 1) * gap;
+  const c = document.createElement("canvas"); c.width = W * dpr; c.height = H * dpr; c.style.width = W + "px";
+  const x = c.getContext("2d"); x.scale(dpr, dpr);
+  x.fillStyle = "#8a96a3"; x.fillRect(0, 0, W, H);
+  patches.forEach((p, i) => { const [r, g, b] = fn(p); x.fillStyle = `rgb(${r},${g},${b})`; x.fillRect(gap + (i % cols) * (cell + gap), gap + Math.floor(i / cols) * (cell + gap), cell, cell); });
+  c.setAttribute("role", "img");
+  return c;
+}
+const DIGIT0 = [[0,0,5,13,9,1,0,0],[0,0,13,15,10,15,5,0],[0,3,15,2,0,11,8,0],[0,4,12,0,0,8,8,0],[0,5,8,0,0,9,8,0],[0,4,11,0,1,12,7,0],[0,2,14,5,10,12,0,0],[0,0,6,13,10,0,0,0]];
+function digitCanvas(img, cell = 15) {
+  const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1)), W = 8 * cell;
+  const c = document.createElement("canvas"); c.width = W * dpr; c.height = W * dpr; c.style.width = W + "px";
+  const x = c.getContext("2d"); x.scale(dpr, dpr);
+  img.forEach((row, y) => row.forEach((v, i) => { const g = Math.max(0, 255 - v * 16); x.fillStyle = `rgb(${g},${g},${g})`; x.fillRect(i * cell, y * cell, cell, cell); }));
+  c.setAttribute("role", "img"); c.setAttribute("aria-label", "An 8 by 8 digit image");
+  return c;
+}
+
+/* ---------- builders: each returns { el, complete(v), grade(v), lock(), reveal(v) } ---------- */
+function setAns(q, v) { S.ans[q.id] = v; save(); refreshCard(q); }
+
+function bChoice(q, rnd) {
+  const multi = q.type === "multi";
+  const opts = q.type === "tf" ? ["True", "False"] : q.opts;
+  const a = q.type === "tf" ? (q.a ? 0 : 1) : q.a;
+  const order = (q.fixed || q.type === "tf") ? range(opts.length) : shuffle(range(opts.length), rnd);
+  const wrap = el("div", "opts" + (q.type === "tf" ? " tf" : ""));
+  const cur = () => S.ans[q.id];
+  order.forEach(i => {
+    const lab = el("label", "opt"); lab.dataset.i = i;
+    const inp = document.createElement("input");
+    inp.type = multi ? "checkbox" : "radio"; inp.name = q.id; inp.id = `${q.id}-o${i}`; inp.value = i;
+    const v = cur();
+    if (multi ? (Array.isArray(v) && v.includes(i)) : v === i) inp.checked = true;
+    inp.addEventListener("change", () => {
+      if (multi) { const s = new Set(Array.isArray(cur()) ? cur() : []); inp.checked ? s.add(i) : s.delete(i); setAns(q, [...s].sort((x, y) => x - y)); }
+      else setAns(q, i);
+    });
+    lab.append(inp, el("span", null, fmt(opts[i])));
+    wrap.append(lab);
+  });
+  const right = multi ? new Set(a) : null;
+  return {
+    el: wrap,
+    complete: v => multi ? Array.isArray(v) && v.length > 0 : v !== undefined,
+    grade: v => multi ? (Array.isArray(v) && v.length === right.size && v.every(i => right.has(i))) : v === a,
+    lock() { wrap.querySelectorAll("input").forEach(i => i.disabled = true); wrap.classList.add("locked"); },
+    reveal(v) {
+      wrap.querySelectorAll(".opt").forEach(o => {
+        const i = +o.dataset.i, chosen = multi ? (Array.isArray(v) && v.includes(i)) : v === i;
+        const isRight = multi ? right.has(i) : i === a;
+        if (isRight) o.classList.add("right"); else if (chosen) o.classList.add("wrong");
+      });
+    }
+  };
+}
+
+function bTiles(q, rnd) {
+  /* swatch, pic and digit questions: a row of big buttons */
+  let items, a, wrapCls = "tiles";
+  const lead = el("div", "source");
+  if (q.type === "pic") {
+    const sc = SCENES[q.scene];
+    items = sc.variants.map(k => ({ make: () => sc.make(k, 40) }));
+    a = sc.variants.indexOf(q.target);
+    if (sc.src) { const src = sc.src(54); src.setAttribute("aria-label", "The camera frame"); lead.append(src, el("span", "cap", sc.cap)); }
+  } else if (q.type === "digit") {
+    items = q.opts.map(t => ({ text: t })); a = q.a; wrapCls = "tiles digits";
+    const pre = el("pre", "numgrid"); pre.textContent = DIGIT0.map(r => r.map(v => String(v).padStart(2)).join(" ")).join("\n");
+    lead.append(digitCanvas(DIGIT0), pre);
+  } else {
+    items = q.opts.map(c => ({ color: c })); a = q.a;
+  }
+  const order = shuffle(range(items.length), rnd);
+  const box = el("div");
+  const wrap = el("div", wrapCls);
+  order.forEach((i, pos) => {
+    const it = items[i];
+    const b = el("button", "tile" + (q.type === "digit" ? " digit" : "")); b.type = "button"; b.dataset.i = i;
+    b.setAttribute("aria-pressed", S.ans[q.id] === i ? "true" : "false");
+    if (it.color) { const sw = el("span", "swatch"); sw.style.background = it.color; b.append(sw, el("b", null, `Colour ${LETTERS[pos]}`)); b.setAttribute("aria-label", `Colour ${LETTERS[pos]}`); }
+    else if (it.make) { const c = it.make(); c.setAttribute("aria-label", `Picture ${LETTERS[pos]}`); b.append(c, el("b", null, LETTERS[pos])); }
+    else b.textContent = it.text;
+    b.addEventListener("click", () => { if (b.disabled) return; wrap.querySelectorAll(".tile").forEach(t => t.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); setAns(q, i); });
+    wrap.append(b);
+  });
+  if (lead.childNodes.length) box.append(lead);
+  box.append(wrap);
+  box.style.display = "grid"; box.style.gap = "12px";
+  return {
+    el: box, complete: v => v !== undefined, grade: v => v === a,
+    lock() { wrap.querySelectorAll(".tile").forEach(t => t.disabled = true); },
+    reveal(v) { wrap.querySelectorAll(".tile").forEach(t => { const i = +t.dataset.i; if (i === a) t.classList.add("right"); else if (i === v) t.classList.add("wrong"); }); }
+  };
+}
+
+function bGrid(q) {
+  const wrap = el("div", "pgrid-wrap");
+  const g = el("div", "pgrid"); g.style.gridTemplateColumns = `30px repeat(${q.cols}, 34px)`;
+  g.append(el("span", "ax", ""));
+  range(q.cols).forEach(x => g.append(el("span", "ax", String(x))));
+  const cells = [];
+  range(q.rows).forEach(y => {
+    g.append(el("span", "ay", String(y)));
+    range(q.cols).forEach(x => {
+      const b = el("button", "pcell"); b.type = "button"; b.dataset.x = x; b.dataset.y = y;
+      b.setAttribute("aria-label", `x ${x}, y ${y}`);
+      const v = S.ans[q.id]; b.setAttribute("aria-pressed", v && v[0] === x && v[1] === y ? "true" : "false");
+      b.addEventListener("click", () => { if (b.disabled) return; cells.forEach(c => c.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); setAns(q, [x, y]); });
+      cells.push(b); g.append(b);
+    });
+  });
+  wrap.append(g, el("p", "axis-note", "Numbers along the top are x (columns); numbers down the side are y (rows). (0, 0) is the top-left pixel."));
+  return {
+    el: wrap, complete: v => Array.isArray(v), grade: v => v[0] === q.a[0] && v[1] === q.a[1],
+    lock() { cells.forEach(c => c.disabled = true); },
+    reveal(v) { cells.forEach(c => { const x = +c.dataset.x, y = +c.dataset.y; if (x === q.a[0] && y === q.a[1]) c.classList.add("right"); else if (v && x === v[0] && y === v[1]) c.classList.add("wrong"); }); }
+  };
+}
+
+function bLine(q) {
+  const wrap = el("div", "lines");
+  const btns = q.lines.map((t, i) => {
+    const b = el("button"); b.type = "button"; b.dataset.i = i;
+    b.append(el("span", null, String(i + 1)), el("span", null, hl(t)));
+    b.setAttribute("aria-pressed", S.ans[q.id] === i ? "true" : "false");
+    b.addEventListener("click", () => { if (b.disabled) return; btns.forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); setAns(q, i); });
+    wrap.append(b); return b;
+  });
+  return {
+    el: wrap, complete: v => v !== undefined, grade: v => v === q.a,
+    lock() { btns.forEach(b => b.disabled = true); },
+    reveal(v) { btns.forEach((b, i) => { if (i === q.a) b.classList.add("right"); else if (i === v) b.classList.add("wrong"); }); }
+  };
+}
+
+function bOrder(q, rnd) {
+  let pool = shuffle(range(q.items.length), rnd);
+  if (pool.every((x, i) => x === i)) pool.reverse();
+  const box = el("div", "order");
+  const mine = el("div", "olist"); mine.dataset.empty = "Tap the steps below in the right order.";
+  const rest = el("div", "olist"); rest.dataset.empty = "All steps are placed.";
+  const clear = el("button", "small-btn", "Clear my order"); clear.type = "button";
+  let locked = false;
+  const chosen = () => Array.isArray(S.ans[q.id]) ? S.ans[q.id] : [];
+  function draw() {
+    mine.innerHTML = ""; rest.innerHTML = "";
+    const c = chosen();
+    c.forEach((i, k) => {
+      const b = el("button", "oitem"); b.type = "button"; b.dataset.i = i; b.dataset.k = k;
+      b.append(el("span", "n", `${k + 1}.`), el("span", null, fmt(q.items[i])));
+      b.setAttribute("aria-label", `Step ${k + 1}: remove`);
+      b.addEventListener("click", () => { if (locked) return; setAns(q, c.slice(0, k).concat(c.slice(k + 1))); draw(); });
+      mine.append(b);
+    });
+    pool.filter(i => !c.includes(i)).forEach(i => {
+      const b = el("button", "oitem"); b.type = "button";
+      b.append(el("span", "n", "+"), el("span", null, fmt(q.items[i])));
+      b.addEventListener("click", () => { if (locked) return; setAns(q, chosen().concat([i])); draw(); });
+      rest.append(b);
+    });
+  }
+  clear.addEventListener("click", () => { if (locked) return; setAns(q, []); draw(); });
+  const h1 = el("div"); h1.append(el("h4", null, "Your order"), mine);
+  const h2 = el("div"); h2.append(el("h4", null, "Steps to place"), rest);
+  box.append(h1, clear, h2);
+  draw();
+  return {
+    el: box, complete: v => Array.isArray(v) && v.length === q.items.length,
+    grade: v => Array.isArray(v) && v.length === q.items.length && v.every((x, i) => x === i),
+    lock() { locked = true; clear.hidden = true; h2.hidden = true; mine.querySelectorAll("button").forEach(b => b.disabled = true); },
+    reveal(v) {
+      mine.querySelectorAll(".oitem").forEach(b => b.classList.add(+b.dataset.i === +b.dataset.k ? "right" : "wrong"));
+      if (!this.grade(v)) {
+        const ok = el("div"); ok.append(el("h4", null, "The right order"));
+        const l = el("div", "olist"); q.items.forEach((t, i) => { const d = el("div", "oitem right"); d.append(el("span", "n", `${i + 1}.`), el("span", null, fmt(t))); l.append(d); });
+        ok.append(l); box.append(ok);
+      }
+    }
+  };
+}
+
+function bMatch(q, rnd) {
+  const wrap = el("div", "match");
+  const rightOrder = shuffle(range(q.pairs.length), rnd);
+  const rows = q.pairs.map((p, i) => {
+    const row = el("div", "mrow");
+    const sel = document.createElement("select"); sel.id = `${q.id}-m${i}`; sel.setAttribute("aria-label", "Choose what it does");
+    sel.append(new Option("Choose…", ""));
+    rightOrder.forEach(j => sel.append(new Option(q.pairs[j][1], String(j))));
+    const v = S.ans[q.id]; if (v && v[i] != null) sel.value = String(v[i]);
+    sel.addEventListener("change", () => { const cur = Array.isArray(S.ans[q.id]) ? S.ans[q.id].slice() : q.pairs.map(() => null); cur[i] = sel.value === "" ? null : +sel.value; setAns(q, cur); });
+    row.append(el("div", null, fmt(p[0])), sel);
+    wrap.append(row); return { row, sel };
+  });
+  return {
+    el: wrap, complete: v => Array.isArray(v) && v.length === q.pairs.length && v.every(x => x != null),
+    grade: v => Array.isArray(v) && v.every((x, i) => x === i),
+    lock() { rows.forEach(r => r.sel.disabled = true); },
+    reveal(v) { rows.forEach((r, i) => { const ok = v && v[i] === i; r.row.classList.add(ok ? "right" : "wrong"); if (!ok) r.row.append(el("div", "fix", "Right answer: " + fmt(q.pairs[i][1]))); }); }
+  };
+}
+
+function bBlanks(q, rnd) {
+  const box = el("div"); box.style.display = "grid"; box.style.gap = "8px";
+  const pre = el("pre", "code");
+  const parts = q.code.split(/\{(\d+)\}/);
+  const sels = [];
+  parts.forEach((p, k) => {
+    if (k % 2 === 0) { pre.append(el("span", null, hl(p))); return; }
+    const bi = +p, b = q.blanks[bi];
+    const sel = document.createElement("select"); sel.className = "blank"; sel.id = `${q.id}-b${bi}`; sel.setAttribute("aria-label", `Gap ${bi + 1}`);
+    sel.append(new Option("  ?  ", ""));
+    shuffle(range(b.opts.length), rnd).forEach(j => sel.append(new Option(b.opts[j], String(j))));
+    const v = S.ans[q.id]; if (v && v[bi] != null) sel.value = String(v[bi]);
+    sel.addEventListener("change", () => { const cur = Array.isArray(S.ans[q.id]) ? S.ans[q.id].slice() : q.blanks.map(() => null); cur[bi] = sel.value === "" ? null : +sel.value; setAns(q, cur); });
+    sels[bi] = sel; pre.append(sel);
+  });
+  box.append(pre);
+  return {
+    el: box, complete: v => Array.isArray(v) && v.length === q.blanks.length && v.every(x => x != null),
+    grade: v => Array.isArray(v) && v.every((x, i) => x === q.blanks[i].a),
+    lock() { sels.forEach(s => s.disabled = true); },
+    reveal(v) {
+      const wrong = [];
+      sels.forEach((s, i) => { const ok = v && v[i] === q.blanks[i].a; s.classList.add(ok ? "right" : "wrong"); if (!ok) wrong.push(`gap ${i + 1}: ${q.blanks[i].opts[q.blanks[i].a]}`); });
+      if (wrong.length) box.append(el("p", "blank-fix", "Right answers: " + wrong.map(esc).join(" · ")));
+    }
+  };
+}
+
+function bSlider(q) {
+  const box = el("div", "slider");
+  const row = el("div", "slider-row");
+  const inp = document.createElement("input"); inp.type = "range"; inp.min = q.min; inp.max = q.max; inp.step = 1; inp.id = `${q.id}-s`;
+  inp.setAttribute("aria-label", q.label);
+  const v0 = S.ans[q.id]; inp.value = v0 != null ? v0 : q.start;
+  const out = el("output", "readout"); out.setAttribute("for", inp.id);
+  const show = () => { out.textContent = `${q.label} = ${inp.value}`; };
+  show();
+  inp.addEventListener("input", () => { show(); setAns(q, +inp.value); });
+  row.append(inp, out); box.append(row);
+  box.append(el("p", "hint", `Move the slider (${q.min} to ${q.max}); the arrow keys move it one step at a time.` + (q.strip !== "none" ? " The colour appears after you check." : "")));
+  return {
+    el: box, complete: v => v != null, grade: v => Math.abs(v - q.a) <= q.tol,
+    lock() { inp.disabled = true; },
+    reveal(v) {
+      const strip = el("div", "strip");
+      if (q.strip === "hue") strip.style.background = `linear-gradient(90deg, ${range(13).map(i => `hsl(${i * 30},100%,50%) ${(i / 12 * 100).toFixed(1)}%`).join(",")})`;
+      else if (q.strip === "gray") strip.style.background = "linear-gradient(90deg, #000, #fff)";
+      else strip.style.background = "var(--accent-soft)";
+      const pos = x => `${((x - q.min) / (q.max - q.min) * 100).toFixed(2)}%`;
+      const k = el("i", "k-ok", `${q.label} ${q.a}`); k.style.left = pos(q.a); strip.append(k);
+      if (v != null && Math.abs(v - q.a) > q.tol) { const y = el("i", "k-you", `you: ${v}`); y.style.left = pos(v); strip.append(y); }
+      box.append(strip);
+    }
+  };
+}
+
+const BUILD = { mc: bChoice, tf: bChoice, multi: bChoice, swatch: bTiles, pic: bTiles, digit: bTiles, grid: bGrid, line: bLine, order: bOrder, match: bMatch, blanks: bBlanks, slider: bSlider };
+
+/* ---------- cards ---------- */
+let CARDS = {}, popId = null;
+function card(q) {
+  const rnd = rng(S.seed ^ hashStr(q.id));
+  const art = el("article", "card"); art.id = q.id; art.dataset.lab = q.lab; art.setAttribute("aria-labelledby", q.id + "-t");
+  const top = el("div", "q-top");
+  top.append(el("span", `ch ch${q.lab}`, CH[q.lab]), el("span", "q-num", REF[q.id]), el("span", "q-type", TYPE_NAMES[q.type]));
+  art.append(top, el("p", "q-text", fmt(q.q)));
+  art.lastChild.id = q.id + "-t";
+  if (q.code) art.append(el("pre", "code", hl(q.code)));
+  const b = BUILD[q.type](q, rnd);
+  art.append(b.el);
+  const actions = el("div", "actions");
+  const btn = el("button", "btn", "Check"); btn.type = "button";
+  const hint = el("span", "hint");
+  btn.addEventListener("click", () => check(q));
+  actions.append(btn, hint);
+  const fb = el("div", "fb"); fb.hidden = true; fb.setAttribute("aria-live", "polite");
+  art.append(actions, fb);
+  CARDS[q.id] = { art, b, btn, hint, fb, actions };
+  refreshCard(q);
+  if (q.id in S.done) applyDone(q);
+  return art;
+}
+function refreshCard(q) {
+  const c = CARDS[q.id]; if (!c || q.id in S.done) return;
+  const ok = c.b.complete(S.ans[q.id]);
+  c.btn.disabled = !ok;
+  c.hint.textContent = ok ? "" : (q.type === "order" ? "Place every step first." : q.type === "match" || q.type === "blanks" ? "Fill every choice first." : q.type === "multi" ? "Tick at least one." : q.type === "slider" ? "Move the slider first." : "Choose an answer first.");
+}
+function check(q) {
+  if (q.id in S.done) return;
+  const v = S.ans[q.id];
+  if (!CARDS[q.id].b.complete(v)) return;
+  S.done[q.id] = !!CARDS[q.id].b.grade(v); master(q); save();
+  applyDone(q);
+  const c = CARDS[q.id];
+  c.fb.classList.add("fresh"); setTimeout(() => c.fb.classList.remove("fresh"), 400);
+  const fl = S.done[q.id] ? "flash-ok" : "flash-no";
+  c.art.classList.add(fl); setTimeout(() => c.art.classList.remove(fl), 700);
+  popId = q.id;
+  updateBar(); drawMap();
+  $("#next").focus({ preventScroll: true });
+}
+function applyDone(q) {
+  const c = CARDS[q.id], v = S.ans[q.id], right = S.done[q.id];
+  const answered = c.b.complete(v);
+  c.b.lock(); c.b.reveal(answered ? v : undefined);
+  c.actions.hidden = true;
+  c.art.classList.add(right ? "is-right" : "is-wrong");
+  c.fb.className = "fb " + (right ? "ok" : "no");
+  c.fb.innerHTML = `<strong>${right ? "Correct" : answered ? "Not quite" : "Not answered"}</strong><p>${fmt(q.why)}</p>` +
+    `<p class="see">Read again: <b>Lab ${q.lab} · ${esc(q.see)}</b></p>`;
+  c.fb.hidden = false;
+}
+
+/* ---------- one question at a time ---------- */
+const RESULTS = el("section", "finish"); RESULTS.id = "results";
+const atEnd = () => S.cur >= ORDER.length;
+function go(i, scroll = true) {
+  S.cur = Math.max(0, Math.min(ORDER.length, i)); save();
+  warnOpen = restartOpen = false;
+  show(true);
+  if (scroll) { const y = $("#stage").getBoundingClientRect().top; if (y < 70 || y > innerHeight * .6) window.scrollBy(0, y - 70); }
+}
+function show(anim) {
+  const head = $("#stage-head"), body = $("#stage-body");
+  head.innerHTML = ""; body.innerHTML = "";
+  let shown;
+  if (atEnd()) {
+    head.append(el("span", "lab-name", S.finished ? (S.round > 1 ? `Round ${S.round} · your result` : "Your result") : "Finish"));
+    body.append(RESULTS); renderResults(); shown = RESULTS;
+  } else {
+    const q = ORDER[S.cur], l = LABS[q.lab - 1];
+    head.append(el("span", `ch ch${q.lab}`, CH[q.lab]), el("span", "lab-name", `Lab ${l.id} · ${esc(l.title)}`), el("span", "pos", `${S.cur + 1} / ${ORDER.length}`));
+    shown = CARDS[q.id].art; body.append(shown);
+  }
+  if (anim) { shown.classList.remove("enter"); void shown.offsetWidth; shown.classList.add("enter"); }
+  $("#prev").disabled = S.cur === 0;
+  $("#next").hidden = atEnd();
+  $("#next").textContent = S.cur === ORDER.length - 1 ? "Finish →" : "Next →";
+  drawMap();
+}
+const wide = window.matchMedia("(min-width: 900px)");
+function drawMap() {
+  const body = $("#map-body"); body.innerHTML = "";
+  const t = totals();
+  LABS.forEach(l => {
+    const qs = ORDER.map((q, i) => [q, i]).filter(([q]) => q.lab === l.id);
+    if (!qs.length) return;
+    const g = el("div", "map-lab");
+    const h = el("h4"); h.append(el("span", `ch ch${l.id}`, CH[l.id]), document.createTextNode(`Lab ${l.id}`));
+    const cells = el("div", "cells");
+    qs.forEach(([q, i]) => {
+      const c = el("button", "cell"); c.type = "button";
+      const st = q.id in S.done ? (S.done[q.id] ? "ok" : "no") : "";
+      if (st) { c.classList.add(st); c.textContent = st === "ok" ? "✓" : "✕"; }
+      if (i === S.cur) { c.classList.add("cur"); c.setAttribute("aria-current", "step"); }
+      if (q.id === popId) c.classList.add("pop");
+      c.setAttribute("aria-label", `Question ${REF[q.id]}${st === "ok" ? ", right" : st === "no" ? ", wrong" : ""}`);
+      c.addEventListener("click", () => { go(i); if (!wide.matches) $("#map").open = false; });
+      cells.append(c);
+    });
+    g.append(h, cells); body.append(g);
+  });
+  popId = null;
+  const lg = el("div", "map-legend");
+  [["var(--open)", "Open"], ["var(--ok)", "Right"], ["var(--bad)", "Wrong"]].forEach(([c, n]) => { const s = el("span"); const i = el("i"); i.style.background = c; s.append(i, document.createTextNode(n)); lg.append(s); });
+  body.append(lg);
+  const r = el("button", "btn ghost map-res", S.finished ? "See my result" : "Finish and see my score"); r.type = "button";
+  r.addEventListener("click", () => { go(ORDER.length); if (!wide.matches) $("#map").open = false; });
+  body.append(r);
+  $("#map-count").textContent = `${t.done} / ${t.all}`;
+}
+
+/* ---------- score bar and results ---------- */
+function totals() {
+  const t = { all: ORDER.length, done: 0, right: 0, lab: {} };
+  LABS.forEach(l => t.lab[l.id] = { n: 0, right: 0, done: 0 });
+  ORDER.forEach(q => { const L = t.lab[q.lab]; L.n++; if (q.id in S.done) { t.done++; L.done++; if (S.done[q.id]) { t.right++; L.right++; } } });
+  return t;
+}
+function updateBar() {
+  const t = totals();
+  $("#st-done").innerHTML = `${t.done}<span> / ${t.all} checked</span>`;
+  $("#st-score").innerHTML = `${t.right}<span> ${t.right === 1 ? "point" : "points"}</span>`;
+  const bar = $("#st-bar"); bar.innerHTML = "";
+  const a = el("i", "p-ok"); a.style.width = (t.all ? t.right / t.all * 100 : 0) + "%";
+  const b = el("i", "p-bad"); b.style.width = (t.all ? (t.done - t.right) / t.all * 100 : 0) + "%";
+  bar.append(a, b);
+  if (atEnd()) renderResults();
+}
+let warnOpen = false, restartOpen = false;
+const labBar = (label, lab, right, n) => {
+  const row = el("div", "lb");
+  row.append(el("span", null, label));
+  const tr = el("div", "track"); const i = el("i"); i.style.width = (n ? right / n * 100 : 0) + "%"; i.style.background = `var(--lab${lab})`; tr.append(i);
+  row.append(tr, el("span", "v", `${right} / ${n}`));
+  return row;
+};
+function renderResults() {
+  const R = RESULTS; const t = totals(); R.innerHTML = "";
+  R.classList.toggle("done", !!S.finished);
+  if (!S.finished) {
+    R.append(el("h2", null, S.round > 1 ? `Finish round ${S.round}` : "Finish the quiz"));
+    const left = t.all - t.done;
+    R.append(el("p", null, left === 0 ? "You have checked every question. Finish to see your score card." : `You have checked ${t.done} of ${t.all} questions. When you finish, every question still open counts as wrong and its answer is shown.`));
+    if (warnOpen && left > 0) {
+      const w = el("div", "warn");
+      w.append(el("p", null, `<b>${left} ${left === 1 ? "question is" : "questions are"} not checked yet.</b> Finish anyway?`));
+      const row = el("div", "actions");
+      const yes = el("button", "btn", "Finish anyway"); yes.type = "button"; yes.addEventListener("click", finish);
+      const no = el("button", "btn ghost", "Keep going"); no.type = "button"; no.addEventListener("click", () => { const k = ORDER.findIndex(q => !(q.id in S.done)); go(k < 0 ? 0 : k); });
+      row.append(yes, no); w.append(row); R.append(w);
+    } else {
+      const row = el("div", "actions");
+      const f = el("button", "btn", "Finish and see my score"); f.type = "button";
+      f.addEventListener("click", () => { if (t.all - t.done > 0) { warnOpen = true; renderResults(); } else finish(); });
+      row.append(f); R.append(row);
+    }
+    signOutControls(R, "Not you? Sign out", "<b>Sign out?</b> This clears the name, the group and all answers in this browser.");
+    return;
+  }
+
+  /* the score card: made to fit one phone screenshot */
+  const sc = el("div", "scorecard"), st = S.student || {};
+  const top = el("div", "sc-top"), who = el("div");
+  who.append(el("div", "sc-label", "Computer Vision · Labs 1–3 quiz"));
+  const nm = el("div", "sc-name"); nm.dir = "auto"; nm.textContent = st.name || ""; who.append(nm);
+  who.append(el("div", "sc-meta", `Group ${esc(st.group || "")} · round ${S.round}<br>${esc(when(S.finishedAt))}`));
+  const pct = t.all ? Math.round(t.right / t.all * 100) : 0;
+  const score = el("div", "sc-score", `${t.right}<small> / ${t.all}</small><div class="pct">${pct} %</div>`);
+  top.append(who, score); sc.append(top);
+  const pix = el("div", "pix"); pix.setAttribute("aria-hidden", "true");
+  ORDER.forEach(q => pix.append(el("i", S.done[q.id] ? "ok" : "no")));
+  sc.append(pix);
+  const bars = el("div", "labbars");
+  LABS.forEach(l => { const L = t.lab[l.id]; if (L.n) bars.append(labBar(`Lab ${l.id}`, l.id, L.right, L.n)); });
+  sc.append(bars);
+  R.append(sc);
+
+  const missed = ORDER.map((q, i) => [q, i]).filter(([q]) => !S.done[q.id]);
+  if (missed.length) {
+    R.append(el("p", null, "Questions to look at again (tap one to see its explanation):"));
+    const m = el("div", "cells");
+    missed.forEach(([q, i]) => { const c = el("button", "cell no", "✕"); c.type = "button"; c.title = REF[q.id]; c.setAttribute("aria-label", `Question ${REF[q.id]}`); c.addEventListener("click", () => go(i)); m.append(c); });
+    R.append(m);
+  } else R.append(el("p", null, S.round > 1 ? "Every answer of this round is right." : "Every answer is right. Well done."));
+
+  /* mastery over all rounds */
+  const ms = el("div", "mastery");
+  const mcount = S.mastered.length;
+  ms.append(el("h3", null, mcount === Q.length ? `All ${Q.length} questions answered right` : `${mcount} of ${Q.length} questions answered right so far`));
+  const mb = el("div", "labbars");
+  LABS.forEach(l => {
+    const qs = Q.filter(q => q.lab === l.id);
+    mb.append(labBar(`Lab ${l.id}`, l.id, qs.filter(q => S.mastered.includes(q.id)).length, qs.length));
+  });
+  ms.append(mb);
+  const row = el("div", "actions");
+  if (missed.length) {
+    const redo = el("button", "btn", `Redo my ${missed.length} ${missed.length === 1 ? "mistake" : "mistakes"}`); redo.type = "button";
+    redo.addEventListener("click", () => nextRound(missed.map(([q]) => q.id)));
+    row.append(redo);
+  }
+  const all = el("button", missed.length ? "btn ghost" : "btn", `New round with all ${Q.length} questions`); all.type = "button";
+  all.addEventListener("click", () => nextRound(null));
+  row.append(all); ms.append(row);
+  R.append(ms);
+  signOutControls(R, "Sign out for the next student", "<b>Sign out?</b> This clears the name, the group and all answers in this browser. Show your score card to your teacher first.");
+}
+function signOutControls(R, label, question) {
+  const row = el("div", "actions");
+  if (restartOpen) {
+    R.append(el("p", null, question));
+    const y = el("button", "btn", "Yes, sign out"); y.type = "button"; y.addEventListener("click", restart);
+    const n = el("button", "btn ghost", "Cancel"); n.type = "button"; n.addEventListener("click", () => { restartOpen = false; renderResults(); });
+    row.append(y, n);
+  } else {
+    const r = el("button", "btn ghost", label); r.type = "button"; r.addEventListener("click", () => { restartOpen = true; renderResults(); });
+    row.append(r);
+  }
+  R.append(row);
+}
+const when = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }); };
+function finish() {
+  ORDER.forEach(q => { if (!(q.id in S.done)) { const v = S.ans[q.id]; S.done[q.id] = CARDS[q.id].b.complete(v) ? !!CARDS[q.id].b.grade(v) : false; master(q); applyDone(q); } });
+  S.finished = true; S.finishedAt = new Date().toISOString(); warnOpen = false; save();
+  updateBar(); go(ORDER.length);
+}
+function nextRound(ids) {
+  /* a new seed gives a new order of the questions and of their options */
+  S = Object.assign({}, S, { seed: newSeed(), ans: {}, done: {}, finished: false, finishedAt: null, round: S.round + 1, ids, cur: 0 });
+  save(); warnOpen = restartOpen = false;
+  build(); window.scrollTo(0, 0);
+}
+function restart() {
+  store.clear(); S = fresh(); warnOpen = restartOpen = false;
+  $("#login-form").reset(); $("#login-err").hidden = true;
+  build(); showGate(); window.scrollTo(0, 0);
+}
+
+/* ---------- sign-in ---------- */
+function showGate() {
+  document.body.classList.toggle("signed-out", !S.student);
+  const who = $("#st-who"); who.innerHTML = "";
+  if (S.student) { const n = el("bdi"); n.textContent = S.student.name; who.append(n, el("span", null, ` · Group ${esc(S.student.group)}`)); }
+}
+const groupSel = $("#st-group");
+for (let g = 1; g <= GROUPS; g++) groupSel.append(new Option(String(g), String(g)));
+$("#login-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("#st-name").value.replace(/\s+/g, " ").trim();
+  const words = name.split(" ").filter(w => /\p{L}/u.test(w));
+  const err = $("#login-err");
+  let msg = "";
+  if (words.length < 3) msg = "Write your name in three parts at least. · اكتب اسمك ثلاثيًا";
+  else if (!groupSel.value) msg = "Choose your group number. · اختر رقم المجموعة";
+  if (msg) { err.innerHTML = esc(msg); err.hidden = false; (words.length < 3 ? $("#st-name") : groupSel).focus(); return; }
+  err.hidden = true;
+  S = fresh();                       /* a new student always starts with no answers */
+  S.student = { name, group: groupSel.value, at: new Date().toISOString() }; save();
+  build(); showGate(); window.scrollTo(0, 0);
+});
+
+/* ---------- page ---------- */
+function build() {
+  arrange(); CARDS = {};
+  ORDER.forEach(card);
+  if (S.cur > ORDER.length) S.cur = 0;
+  const note = $("#round-note");
+  note.hidden = S.round === 1;
+  note.textContent = S.ids ? `Round ${S.round}: the ${ORDER.length} ${ORDER.length === 1 ? "question" : "questions"} you got wrong last time, in a new order.` : `Round ${S.round}: all ${Q.length} questions, in a new order.`;
+  updateBar(); show(false);
+}
+$("#prev").addEventListener("click", () => go(S.cur - 1));
+$("#next").addEventListener("click", () => go(S.cur + 1));
+$("#to-results").addEventListener("click", () => go(ORDER.length));
+$("#map").open = wide.matches;
+wide.addEventListener("change", e => { $("#map").open = e.matches; });
+const typeCount = {};
+Q.forEach(q => typeCount[q.type] = (typeCount[q.type] || 0) + 1);
+$("#count-line").innerHTML = `${Q.length} questions: Lab 1 (${Q.filter(q => q.lab === 1).length}), Lab 2 (${Q.filter(q => q.lab === 2).length}) and Lab 3 (${Q.filter(q => q.lab === 3).length}). Allow about an hour for a full round.`;
+const chips = $("#type-chips");
+Object.keys(TYPE_NAMES).forEach(k => { if (typeCount[k]) chips.append(el("span", "chip", `${TYPE_NAMES[k]} · ${typeCount[k]}`)); });
+build();
+showGate();
+})();
+</script>
+
+</body>
+</html>
