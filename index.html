@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Computational Perception Quiz</title>
+<meta name="description" content="82 click-only practice questions on Labs 1–3 of Computational Perception: images and pixels, colour masks, and reading digits with k-NN.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Computational Perception">
+<meta property="og:title" content="Labs 1–3 Practice Quiz · Computational Perception">
+<meta property="og:description" content="82 click-only questions on images and pixels, colour masks and k-NN digits. Sign in with your name and group; nothing is sent anywhere.">
+<meta property="og:url" content="https://ahmedabdalmontalib.github.io/computational-perception-quiz/">
+<meta property="og:image" content="https://ahmedabdalmontalib.github.io/computational-perception-quiz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Labs 1–3 Practice Quiz: a handwritten zero drawn as 8 by 8 pixels beside the three labs.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c1824'/%3E%3Crect x='15' y='17' width='9' height='30' rx='2.5' fill='%233d78e6'/%3E%3Crect x='27.5' y='17' width='9' height='30' rx='2.5' fill='%2334a048'/%3E%3Crect x='40' y='17' width='9' height='30' rx='2.5' fill='%23d9435a'/%3E%3Cpath d='M9 18V9h9M46 9h9v9M55 46v9h-9M18 55H9v-9' stroke='%23ffd23f' stroke-width='3.5' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f151b" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Labs 1–3 Quiz">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Computational Perception Quiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
@@ -218,6 +237,9 @@ body:not(.signed-out) .gate { display: none; }
 .stage-head .pos { margin-left: auto; font: 600 .85rem/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .nav { display: flex; justify-content: space-between; gap: 10px; }
 .nav .btn { min-width: 8.5em; }
+.keys-hint { margin: 0; text-align: center; font-size: .8rem; color: var(--muted); }
+.keys-hint kbd { font: 600 .75rem/1 var(--font-mono); padding: 3px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--surface); color: var(--ink); }
+@media (hover: none), (max-width: 700px) { .keys-hint { display: none; } }
 
 /* Question cards: a band in the lab's channel colour on top */
 .card { position: relative; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--open); border-radius: var(--r); padding: 20px 20px 18px; display: grid; gap: 14px; min-width: 0; transition: box-shadow .5s; }
@@ -437,6 +459,7 @@ pre.code select.blank.wrong { background: #5a2420; border-color: #ff6f63; color:
             <li>Press <b>Check</b>: the answer is locked and the explanation tells you where to read again in the lab sheet.</li>
             <li>Move with <b>Next</b> and <b>Previous</b>, or tap a square of the question map.</li>
             <li>Press <b>Finish</b> for your score card, then <b>Redo my mistakes</b> for only the questions you got wrong.</li>
+            <li>On a phone, add this page to your home screen: it opens like an app and works without internet after the first visit.</li>
           </ol>
           <p class="ar" lang="ar" dir="rtl">لا تحتاج إلى الكتابة في هذا الاختبار: اختر إجابتك ثم اضغط <b>Check</b> لترى الإجابة الصحيحة والشرح. في النهاية اضغط <b>Finish</b> لترى درجتك، ثم اضغط <b>Redo my mistakes</b> لتعيد حل الأسئلة التي أخطأت فيها فقط.</p>
         </details>
@@ -469,6 +492,7 @@ pre.code select.blank.wrong { background: #5a2420; border-color: #ff6f63; color:
         <button class="btn ghost" id="prev" type="button">← Previous</button>
         <button class="btn" id="next" type="button">Next →</button>
       </div>
+      <p class="keys-hint">Keys: <kbd>1</kbd>–<kbd>9</kbd> choose · <kbd>Enter</kbd> check, then next · <kbd>←</kbd> <kbd>→</kbd> previous and next</p>
     </div>
   </div>
 
@@ -1399,6 +1423,11 @@ function renderResults() {
   LABS.forEach(l => { const L = t.lab[l.id]; if (L.n) bars.append(labBar(`Lab ${l.id}`, l.id, L.right, L.n)); });
   sc.append(bars);
   R.append(sc);
+  if (canSave) {
+    const row0 = el("div", "actions"), sv = el("button", "btn ghost", "Save as image"); sv.type = "button";
+    sv.addEventListener("click", saveCard);
+    row0.append(sv, el("span", "hint", "A picture of your score card, to send to your TA.")); R.append(row0);
+  }
 
   const missed = ORDER.map((q, i) => [q, i]).filter(([q]) => !S.done[q.id]);
   if (missed.length) {
@@ -1551,6 +1580,103 @@ const typeCount = {};
 Q.forEach(q => typeCount[q.type] = (typeCount[q.type] || 0) + 1);
 $("#hero-specs").innerHTML = [[Q.length, "Questions"], [Object.keys(typeCount).length, "Question types"], ["60", "Minutes a round"], ["0", "Typing"]]
   .map(([v, l]) => `<div><dt>${l}</dt><dd>${v}</dd></div>`).join("");
+/* ---------- the score card as a picture (GitHub Pages and the offline file; downloads are blocked elsewhere) ---------- */
+const canSave = location.protocol === "file:" || location.hostname.endsWith("github.io");
+async function saveCard() {
+  const t = totals(), st = S.student || {}, W = 1080, H = 1350, P = 80;
+  try { await Promise.all(['700 80px "Chakra Petch"', '600 30px "IBM Plex Sans"', '400 24px "JetBrains Mono"', '600 60px "IBM Plex Sans Arabic"'].map(f => document.fonts.load(f))); } catch (e) { /* fall back to system fonts */ }
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  const g = x.createRadialGradient(0, 0, 0, 0, 0, W * 1.35);
+  g.addColorStop(0, "#16304a"); g.addColorStop(.5, "#0c1824"); g.addColorStop(1, "#0a131c");
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = "rgba(255,255,255,.045)"; x.lineWidth = 1;
+  for (let i = 0; i <= W; i += 30) { x.beginPath(); x.moveTo(i + .5, 0); x.lineTo(i + .5, H); x.stroke(); }
+  for (let j = 0; j <= H; j += 30) { x.beginPath(); x.moveTo(0, j + .5); x.lineTo(W, j + .5); x.stroke(); }
+  const mono = (w, s) => `${w} ${s}px "JetBrains Mono", ui-monospace, Menlo, monospace`;
+  const display = s => `700 ${s}px "Chakra Petch", "Segoe UI", system-ui, sans-serif`;
+  const sans = (w, s) => `${w} ${s}px "IBM Plex Sans", "Segoe UI", system-ui, sans-serif`;
+  if ("letterSpacing" in x) x.letterSpacing = "3px";
+  x.fillStyle = "#8fb3d1"; x.font = mono(600, 22);
+  x.fillText("COMPUTATIONAL PERCEPTION · LABS 1–3 PRACTICE QUIZ", P, 112);
+  if ("letterSpacing" in x) x.letterSpacing = "0px";
+
+  const name = st.name || "", ar = /[؀-ۿ]/.test(name);
+  x.fillStyle = "#e6edf3";
+  x.font = ar ? `600 66px "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", sans-serif` : display(66);
+  if (ar) { x.direction = "rtl"; x.textAlign = "right"; x.fillText(name, W - P, 212, W - 2 * P); x.direction = "ltr"; x.textAlign = "left"; }
+  else x.fillText(name, P, 212, W - 2 * P);
+  x.fillStyle = "#8fa6bb"; x.font = mono(400, 26);
+  x.fillText(`Group ${st.group || ""} · round ${S.round} · ${when(S.finishedAt)}`, P, 266, W - 2 * P);
+  x.fillStyle = "rgba(255,255,255,.12)"; x.fillRect(P, 312, W - 2 * P, 2);
+
+  const pct = t.all ? Math.round(t.right / t.all * 100) : 0;
+  x.fillStyle = "#8fa6bb"; x.font = mono(600, 22); x.fillText("SCORE", P, 380);
+  x.fillStyle = "#e6edf3"; x.font = display(210); x.fillText(String(t.right), P - 6, 560);
+  const sw = x.measureText(String(t.right)).width;
+  x.fillStyle = "#8fa6bb"; x.font = display(76); x.fillText(`/ ${t.all}`, P + sw + 10, 560);
+  x.fillStyle = "#7cc4ff"; x.font = display(96); x.textAlign = "right"; x.fillText(`${pct} %`, W - P, 560); x.textAlign = "left";
+
+  const cell = 26, gap = 6, per = Math.floor((W - 2 * P + gap) / (cell + gap));
+  ORDER.forEach((q, i) => {
+    x.fillStyle = S.done[q.id] ? "#46c27a" : "#ff6f63";
+    x.fillRect(P + (i % per) * (cell + gap), 620 + Math.floor(i / per) * (cell + gap), cell, cell);
+  });
+  let y = 620 + Math.ceil(ORDER.length / per) * (cell + gap) + 60;
+  const labColour = { 1: "#3d78e6", 2: "#34a048", 3: "#d9435a" };
+  LABS.forEach(l => {
+    const L = t.lab[l.id]; if (!L.n) return;
+    x.fillStyle = labColour[l.id]; x.beginPath(); x.roundRect ? x.roundRect(P, y - 34, 44, 44, 9) : x.rect(P, y - 34, 44, 44); x.fill();
+    x.fillStyle = "#fff"; x.font = mono(700, 24); x.textAlign = "center"; x.fillText(CH[l.id], P + 22, y - 4); x.textAlign = "left";
+    x.fillStyle = "#e6edf3"; x.font = sans(600, 30); x.fillText(l.title, P + 64, y - 2);
+    x.fillStyle = "#e6edf3"; x.font = mono(600, 28); x.textAlign = "right"; x.fillText(`${L.right} / ${L.n}`, W - P, y - 2); x.textAlign = "left";
+    x.fillStyle = "rgba(255,255,255,.1)"; x.fillRect(P + 64, y + 18, W - 2 * P - 64, 10);
+    x.fillStyle = labColour[l.id]; x.fillRect(P + 64, y + 18, (W - 2 * P - 64) * L.right / L.n, 10);
+    y += 100;
+  });
+  x.fillStyle = "#8fa6bb"; x.font = mono(400, 22);
+  x.fillText("ahmedabdalmontalib.github.io/computational-perception-quiz", P, H - 64);
+  c.toBlob(b => {
+    if (!b) return;
+    const a = document.createElement("a"); a.href = URL.createObjectURL(b);
+    a.download = `score-card-group${st.group || ""}-round${S.round}.png`;
+    document.body.append(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }, "image/png");
+}
+
+/* ---------- keyboard on a computer: 1-9 choose, Enter checks (then moves on), arrows move between questions ---------- */
+document.addEventListener("keydown", e => {
+  if (e.altKey || e.ctrlKey || e.metaKey || !S.student || atEnd()) return;
+  const a = document.activeElement, tag = a ? a.tagName : "";
+  if ((tag === "INPUT" && a.type === "text") || tag === "TEXTAREA" || tag === "SELECT") return;
+  const q = ORDER[S.cur], c = CARDS[q.id];
+  if (/^[1-9]$/.test(e.key)) {
+    if (q.id in S.done) return;
+    const items = [...c.art.querySelectorAll(".opts .opt input, .tiles .tile, .lines button")];
+    const it = items[+e.key - 1];
+    if (it) { e.preventDefault(); it.click(); it.focus({ preventScroll: true }); }
+    return;
+  }
+  if (e.key === "Enter") {
+    if (tag === "BUTTON" || tag === "A" || tag === "SUMMARY") return;   /* the focused control handles it */
+    e.preventDefault();
+    if (!(q.id in S.done)) { if (!c.btn.disabled) c.btn.click(); }
+    else go(S.cur + 1);
+    return;
+  }
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    const own = (tag === "INPUT" && ["radio", "checkbox", "range"].includes(a.type)) || (a && a.getAttribute("role") === "radio");
+    if (own) return;                                                   /* arrows already move inside these */
+    e.preventDefault(); go(S.cur + (e.key === "ArrowRight" ? 1 : -1));
+  }
+});
+
+/* ---------- offline: keep a copy of the page on the device (GitHub Pages only) ---------- */
+if ("serviceWorker" in navigator && location.protocol === "https:" && location.hostname.endsWith("github.io")) {
+  navigator.serviceWorker.register("sw.js").catch(() => { /* the quiz still works online */ });
+}
+
 build();
 showGate();
 })();

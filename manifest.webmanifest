@@ -1,0 +1,15 @@
+{
+  "name": "Labs 1–3 Practice Quiz · Computational Perception",
+  "short_name": "Labs 1–3 Quiz",
+  "description": "82 click-only practice questions on Labs 1–3 of Computational Perception.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c1824",
+  "theme_color": "#0c1824",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

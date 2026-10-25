@@ -22,6 +22,14 @@ The page is a single file, `index.html`, with nothing to install.
 
 A link to the file itself (`github.com/.../index.html`) shows its code, not the quiz: always give the students the `github.io` address.
 
+## Share it
+
+Student link: **https://ahmedabdalmontalib.github.io/computational-perception-quiz/**
+
+<img src="qr.png" alt="QR code of the student link" width="220">
+
+On a phone the page can be added to the home screen: it then opens like an app and works without internet after the first visit.
+
 ## Good to know
 
 - Each student's name and answers stay in their own browser. Nothing is sent anywhere, and the page does not collect scores.
